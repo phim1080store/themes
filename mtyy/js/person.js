@@ -1,0 +1,2 @@
+$(document).ready(function(){var $text=$('#height_limit');if($text.length>0&&$text[0].scrollHeight>$text.height()){$('#height_limit').addClass('occlusion');$('.text-open').show()}
+$('.tim-bnt').on("click",function(e){$text.toggleClass('height_rel');if($text.hasClass('height_rel')){$('#height_limit').removeClass('occlusion');$(this).html('<i class="fa r6 ease"></i>Thu gọn')}else{$('#height_limit').addClass('occlusion');$(this).html('<i class="fa r6 ease"></i>Xem thêm')}})})
