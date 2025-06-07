@@ -74,7 +74,7 @@ window.player.on('lock',()=>{if(window.player.isLock){document.querySelectorAll(
 window.player.on('video:playing',()=>{isWaiting=!1})
 window.player.on('video:progress',()=>{if(!window.player.currentTime)return
 localStorage.setItem(resumeKey,window.player.currentTime)})
-window.player.on('ready',()=>{var progress=parseFloat(localStorage.getItem(resumeKey))
+window.player.on('video:ended',(e)=>{noSleep.disable()});window.player.on('ready',()=>{var progress=parseFloat(localStorage.getItem(resumeKey))
 if(isNaN(progress)){progress=0}
 window.player.seek=progress
 try{let histories=JSON.parse(localStorage['phim1080-histories']||'[]');(data.duration=window.player.duration),(histories=histories.filter((item)=>item.id!==data.id))
