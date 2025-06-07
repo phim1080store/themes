@@ -1,8 +1,8 @@
 function checkScreenSize(){const element=document.querySelector('#nav')
 if(window.innerWidth<765){element.classList.add('no-null','head-c')}else{element.classList.remove('no-null','head-c')}}
 window.addEventListener('resize',checkScreenSize)
-window.addEventListener('load',checkScreenSize)
-document.addEventListener('DOMContentLoaded',function(){let d=document,s=d.createElement('script')
+document.addEventListener('DOMContentLoaded',function(){checkScreenSize()
+let d=document,s=d.createElement('script')
 s.src='https://https-phim1080-store.disqus.com/embed.js'
 s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s)
 new Swiper('.actor-roll',{slidesPerView:4,slidesPerGroup:4,grid:{rows:2,fill:'row',},spaceBetween:8,breakpoints:{1692:{slidesPerView:11,slidesPerGroup:11,spaceBetween:30},1330:{slidesPerView:9,slidesPerGroup:9,spaceBetween:30},993:{slidesPerView:7,slidesPerGroup:7,spaceBetween:30},560:{slidesPerView:6,slidesPerGroup:6,spaceBetween:15},},a11y:{enabled:!1,},})
