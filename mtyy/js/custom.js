@@ -103,7 +103,7 @@ window.addEventListener('scroll',function(){let nav=document.getElementById('nav
 if(window.scrollY>0){nav.classList.add('head-b')
 nav.style.position='fixed'}else{nav.classList.remove('head-b')
 nav.style.position=''}})
-function renderHistory(){let history=(JSON.parse(localStorage.getItem('searchHistory'))||[]).slice(0,5)
+document.getElementById('toggleSearch').addEventListener('click',function(){const button=document.getElementById('toggleSearch');const logo=document.querySelector('.logo-brand');const form=document.querySelector('.search-min-box');if(form.classList.contains('v-show')){form.classList.remove('v-show');logo.classList.remove('v-hidden');button.classList.add('ds-sousuo');button.classList.remove('ds-guanbi2')}else{form.classList.add('v-show');logo.classList.add('v-hidden');button.classList.remove('ds-sousuo');button.classList.add('ds-guanbi2')}});function renderHistory(){let history=(JSON.parse(localStorage.getItem('searchHistory'))||[]).slice(0,5)
 let resultBox=document.getElementById('result')
 if(history.length===0)return(resultBox.innerHTML='')
 let html=''
