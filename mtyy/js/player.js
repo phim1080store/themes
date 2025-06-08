@@ -13,7 +13,8 @@ document.getElementById('player-wrapper').innerHTML=`<iframe width="100%" height
 if(type=='m3u8'){let timeoutId=null
 let resumeKey='phim1080-playerposition-'+id
 let nextSlug=getNextPrevEpisode(!0)
-let noSleep=new NoSleep();let language={vi:{'Video Info':'Thông tin video',Close:'Đóng','Video Load Failed':'Tải video thất bại',Volume:'Âm lượng',Play:'Phát',Pause:'Tạm dừng',Rate:'Tốc độ',Mute:'Tắt tiếng','Video Flip':'Lật video',Horizontal:'Ngang',Vertical:'Dọc',Reconnect:'Kết nối lại','Show Setting':'Cài đặt','Hide Setting':'Ẩn cài đặt',Screenshot:'Chụp màn hình','Play Speed':'Tốc độ phát','Aspect Ratio':'Tỷ lệ khung hình',Default:'Mặc định',Normal:'Bình thường',Open:'Mở','Switch Video':'Chuyển video','Switch Subtitle':'Chuyển phụ đề',Fullscreen:'Toàn màn hình','Exit Fullscreen':'Thoát toàn màn hình','Web Fullscreen':'Toàn màn hình trình duyệt','Exit Web Fullscreen':'Thoát toàn màn hình trình duyệt','Mini window.player':'Trình phát mini','PIP Mode':'Phát trong hình','Exit PIP Mode':'Thoát phát trong hình','PIP Not Supported':'Không hỗ trợ phát trong hình','Fullscreen Not Supported':'Không hỗ trợ toàn màn hình','Subtitle Offset':'Độ trễ phụ đề','Last Seen':'Lần xem cuối','Jump Play':'Nhảy đến đoạn phát',AirPlay:'AirPlay','AirPlay Not Available':'AirPlay không khả dụng',},}
+let noSleep=new NoSleep()
+let language={vi:{'Video Info':'Thông tin video',Close:'Đóng','Video Load Failed':'Tải video thất bại',Volume:'Âm lượng',Play:'Phát',Pause:'Tạm dừng',Rate:'Tốc độ',Mute:'Tắt tiếng','Video Flip':'Lật video',Horizontal:'Ngang',Vertical:'Dọc',Reconnect:'Kết nối lại','Show Setting':'Cài đặt','Hide Setting':'Ẩn cài đặt',Screenshot:'Chụp màn hình','Play Speed':'Tốc độ phát','Aspect Ratio':'Tỷ lệ khung hình',Default:'Mặc định',Normal:'Bình thường',Open:'Mở','Switch Video':'Chuyển video','Switch Subtitle':'Chuyển phụ đề',Fullscreen:'Toàn màn hình','Exit Fullscreen':'Thoát toàn màn hình','Web Fullscreen':'Toàn màn hình trình duyệt','Exit Web Fullscreen':'Thoát toàn màn hình trình duyệt','Mini window.player':'Trình phát mini','PIP Mode':'Phát trong hình','Exit PIP Mode':'Thoát phát trong hình','PIP Not Supported':'Không hỗ trợ phát trong hình','Fullscreen Not Supported':'Không hỗ trợ toàn màn hình','Subtitle Offset':'Độ trễ phụ đề','Last Seen':'Lần xem cuối','Jump Play':'Nhảy đến đoạn phát',AirPlay:'AirPlay','AirPlay Not Available':'AirPlay không khả dụng',},}
 let controls=[]
 if(!Artplayer.utils.isMobile){controls=[{position:'left',name:'fast-rewind',index:11,html:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><path fill="currentColor" d="M4 18A12 12 0 1 0 16 6h-4V1L6 7l6 6V8h4A10 10 0 1 1 6 18Z"></path><path fill="currentColor" d="M19.63 22.13a2.84 2.84 0 0 1-1.28-.27a2.44 2.44 0 0 1-.89-.77a3.6 3.6 0 0 1-.52-1.25a7.7 7.7 0 0 1-.17-1.68a8 8 0 0 1 .17-1.68a3.7 3.7 0 0 1 .52-1.25a2.44 2.44 0 0 1 .89-.77a2.84 2.84 0 0 1 1.28-.27a2.44 2.44 0 0 1 2.16 1a5.23 5.23 0 0 1 .7 2.93a5.23 5.23 0 0 1-.7 2.93a2.44 2.44 0 0 1-2.16 1.08m0-1.22a1.07 1.07 0 0 0 1-.55a3.4 3.4 0 0 0 .37-1.51v-1.38a3.3 3.3 0 0 0-.29-1.5a1.23 1.23 0 0 0-2.06 0a3.3 3.3 0 0 0-.29 1.5v1.38a3.4 3.4 0 0 0 .29 1.51a1.06 1.06 0 0 0 .98.55m-9 1.09v-1.18h2v-5.19l-1.86 1l-.55-1.06l2.32-1.3H14v6.5h1.78V22z"></path></svg>',tooltip:'10 giây trước',click:function(){window.player.seek=this.currentTime-10},},{position:'left',name:'fast-forward',index:12,html:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><path fill="currentColor" d="M26 18A10 10 0 1 1 16 8h4v5l6-6l-6-6v5h-4a12 12 0 1 0 12 12Z"></path><path fill="currentColor" d="M19.63 22.13a2.84 2.84 0 0 1-1.28-.27a2.44 2.44 0 0 1-.89-.77a3.6 3.6 0 0 1-.52-1.25a7.7 7.7 0 0 1-.17-1.68a8 8 0 0 1 .17-1.68a3.7 3.7 0 0 1 .52-1.25a2.44 2.44 0 0 1 .89-.77a2.84 2.84 0 0 1 1.28-.27a2.44 2.44 0 0 1 2.16 1a5.23 5.23 0 0 1 .7 2.93a5.23 5.23 0 0 1-.7 2.93a2.44 2.44 0 0 1-2.16 1.08m0-1.22a1.07 1.07 0 0 0 1-.55a3.4 3.4 0 0 0 .37-1.51v-1.38a3.3 3.3 0 0 0-.29-1.5a1.23 1.23 0 0 0-2.06 0a3.3 3.3 0 0 0-.29 1.5v1.38a3.4 3.4 0 0 0 .29 1.51a1.06 1.06 0 0 0 .98.55m-9 1.09v-1.18h2v-5.19l-1.86 1l-.55-1.06l2.32-1.3H14v6.5h1.78V22z"></path></svg>',tooltip:'10 giây sau',click:function(){window.player.seek=this.currentTime+10},},]}
 if(typeof nextSlug!=='undefined'&&nextSlug){controls.push({position:'right',name:'change-video',index:1,html:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="m4.028 20.882a1 1 0 0 0 1.027-.05l12-8a1 1 0 0 0 0-1.664l-12-8a1 1 0 0 0 -1.555.832v16a1 1 0 0 0 .528.882zm1.472-15.013 9.2 6.131-9.2 6.131z"></path><path fill="#ffffff" d="m19.5 19a1 1 0 0 0 1-1v-12a1 1 0 0 0 -2 0v12a1 1 0 0 0 1 1z"></path></svg>`,tooltip:'Tập tiếp',click:function(){window.location.href=nextSlug},})}
@@ -62,11 +63,13 @@ window.player.once('play',function(){fetch('/phim/'+movie_slug+'/view')})
 window.player.on('loading',function(){document.getElementById('play-icon')?.classList.add('v-hidden')
 document.getElementById('pause-icon')?.classList.add('v-hidden')})
 window.player.on('pause',function(){isPaused=!0
-noSleep.disable();document.querySelectorAll('.cs-mask').forEach((el)=>el.classList.remove('v-hidden'))
+noSleep.disable()
+document.querySelectorAll('.cs-mask').forEach((el)=>el.classList.remove('v-hidden'))
 document.getElementById('play-icon')?.classList.remove('v-hidden')
 document.getElementById('pause-icon')?.classList.add('v-hidden')})
 window.player.on('play',function(){isPaused=!1
-noSleep.enable();document.querySelectorAll('.cs-mask').forEach((el)=>el.classList.remove('v-hidden'))
+noSleep.enable()
+document.querySelectorAll('.cs-mask').forEach((el)=>el.classList.remove('v-hidden'))
 document.getElementById('play-icon')?.classList.add('v-hidden')
 document.getElementById('pause-icon')?.classList.remove('v-hidden')})
 window.player.on('control',()=>{if(window.player.isLock){document.querySelectorAll('.cs-mask').forEach((el)=>el.classList.add('v-hidden'))}else{document.querySelectorAll('.cs-mask').forEach((el)=>el.classList.remove('v-hidden'))}})
@@ -74,7 +77,8 @@ window.player.on('lock',()=>{if(window.player.isLock){document.querySelectorAll(
 window.player.on('video:playing',()=>{isWaiting=!1})
 window.player.on('video:progress',()=>{if(!window.player.currentTime)return
 localStorage.setItem(resumeKey,window.player.currentTime)})
-window.player.on('video:ended',(e)=>{noSleep.disable()});window.player.on('ready',()=>{var progress=parseFloat(localStorage.getItem(resumeKey))
+window.player.on('video:ended',(e)=>{noSleep.disable()})
+window.player.on('ready',()=>{var progress=parseFloat(localStorage.getItem(resumeKey))
 if(isNaN(progress)){progress=0}
 window.player.seek=progress
 try{let histories=JSON.parse(localStorage['phim1080-histories']||'[]');(data.duration=window.player.duration),(histories=histories.filter((item)=>item.id!==data.id))
@@ -82,8 +86,21 @@ histories.unshift(data)
 histories=histories.slice(0,28)
 localStorage['phim1080-histories']=JSON.stringify(histories)}catch(error){console.log(error)
 localStorage.removeItem('phim1080-histories')}})
-const artVideoPlayer=document.querySelector('.art-video-player');const csMasks=document.querySelectorAll('.cs-mask');const playIcon=document.getElementById('play-icon');const pauseIcon=document.getElementById('pause-icon');new MutationObserver(function(mutationsList){mutationsList.forEach(mutation=>{if(mutation.type==='attributes'&&mutation.attributeName==='class'){const classList=artVideoPlayer.classList;if(classList.contains('art-hide-cursor')){csMasks.forEach(el=>el.classList.add('v-hidden'))}else if(!classList.contains('art-loading-show')){if(window.player.playing){playIcon.classList.add('v-hidden');pauseIcon.classList.remove('v-hidden')}else{playIcon.classList.remove('v-hidden');pauseIcon.classList.add('v-hidden')}}}})}).observe(artVideoPlayer,{attributes:!0});if(localStorage['phim1080-gesture']==='true'&&Artplayer.utils.isMobile){const container=window.player.template.$container;container.addEventListener('touchmove',()=>{const artVideoPlayer=document.querySelector('.art-video-player');if(!artVideoPlayer.classList.contains('art-control-show')){artVideoPlayer.classList.add('art-mini-progress-bar')}});container.addEventListener('touchend',()=>{document.querySelector('.art-video-player').classList.remove('art-mini-progress-bar')})}
-new MutationObserver(mutationsList=>{const artNoticeInner=document.querySelector('.art-notice-inner');mutationsList.forEach(mutation=>{if(mutation.type==='characterData'||mutation.type==='childList'){const text=artNoticeInner.textContent.trim();if(text.includes('Mất mạng, đang thử kết nối lại...')||text.includes('Lỗi media, đang khôi phục...')||text.includes('Lỗi nghiêm trọng, dừng phát...')){artNoticeInner.classList.remove('v-hidden')}else{artNoticeInner.classList.add('v-hidden')}}})}).observe(document.querySelector('.art-notice-inner'),{childList:!0,subtree:!0,characterData:!0})}}
+const artVideoPlayer=document.querySelector('.art-video-player')
+const csMasks=document.querySelectorAll('.cs-mask')
+const playIcon=document.getElementById('play-icon')
+const pauseIcon=document.getElementById('pause-icon')
+new MutationObserver(function(mutationsList){mutationsList.forEach((mutation)=>{if(mutation.type==='attributes'&&mutation.attributeName==='class'){const classList=artVideoPlayer.classList
+if(classList.contains('art-hide-cursor')){csMasks.forEach((el)=>el.classList.add('v-hidden'))}else if(!classList.contains('art-loading-show')){if(window.player.playing){playIcon.classList.add('v-hidden')
+pauseIcon.classList.remove('v-hidden')}else{playIcon.classList.remove('v-hidden')
+pauseIcon.classList.add('v-hidden')}}}})}).observe(artVideoPlayer,{attributes:!0})
+if(localStorage['phim1080-gesture']==='true'&&Artplayer.utils.isMobile){const container=window.player.template.$container
+container.addEventListener('touchmove',()=>{const artVideoPlayer=document.querySelector('.art-video-player')
+if(!artVideoPlayer.classList.contains('art-control-show')){artVideoPlayer.classList.add('art-mini-progress-bar')}})
+container.addEventListener('touchend',()=>{document.querySelector('.art-video-player').classList.remove('art-mini-progress-bar')})}
+new MutationObserver((mutationsList)=>{const artNoticeInner=document.querySelector('.art-notice-inner')
+mutationsList.forEach((mutation)=>{if(mutation.type==='characterData'||mutation.type==='childList'){const text=artNoticeInner.textContent.trim()
+if(text.includes('Mất mạng, đang thử kết nối lại...')||text.includes('Lỗi media, đang khôi phục...')||text.includes('Lỗi nghiêm trọng, dừng phát...')){artNoticeInner.classList.remove('v-hidden')}else{artNoticeInner.classList.add('v-hidden')}}})}).observe(document.querySelector('.art-notice-inner'),{childList:!0,subtree:!0,characterData:!0,})}}
 document.addEventListener('DOMContentLoaded',function(){if(!isBot()){let tokens=['5f7fbb2a8afb4b','1b6a79055dd6a8']
 let randomToken=tokens[Math.floor(Math.random()*tokens.length)]
 fetch(`https://ipinfo.io/json?token=${randomToken}`).then((response)=>response.json()).then((data)=>{let countries=['SG','HK','TW','CN','KR','TH','LA','KH','MM','MY','PH','JP']
