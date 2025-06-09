@@ -24,8 +24,7 @@ let response=histories.find((item)=>item.id==movie_id)
 if(response?.href){const btn=document.querySelector('.vod-detail-bnt')
 if(btn){btn.innerHTML='<i class="fa r6 ds-bofang1"></i> Xem tiếp'
 btn.setAttribute('href',response.href)}
-let activeLink=document.querySelector('.player-list-box a[href="'+response.href+'"]')
-if(activeLink)activeLink.classList.add('on')}
+let activeLink=document.querySelector('.player-list-box a[href="'+response.href+'"]');if(activeLink){activeLink.classList.add('on');const dataId=activeLink.getAttribute('data-id');if(dataId){const serverLink=document.querySelector(`.anthology-tab a[data-id="${dataId}"]`);if(serverLink)serverLink.classList.add('active');}}}
 const desc=document.querySelector('.banner-content__desc')
 const button=document.querySelector('.intl-album-more-btn')
 if(desc&&button){if(desc.scrollHeight<=desc.clientHeight){button.style.display='none'}else{button.style.display='flex'}

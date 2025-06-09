@@ -8,6 +8,22 @@ let newIndex=isNext?index+1:index-1
 if(!episodeList[newIndex])return null
 let url=window.location.href
 return url.substring(0,url.lastIndexOf('/'))+`/${episodeList[newIndex].slug}-${episodeList[newIndex].id}`}
+function getAudioUrl(){const href=document.querySelector('li.on > a')?.getAttribute('href')
+const slug=href?.replace(/-\d+$/,'-')
+const movie_id=href?.split('/').filter(Boolean).pop().match(/\d+$/)?.[0]
+const allLinks=Array.from(document.querySelectorAll('[id^="episode-"] a'))
+const filteredLinks=allLinks.filter((a)=>{const dataId=a.getAttribute('href')
+return dataId?.startsWith(slug)})
+const activeLink=document.querySelector('li.on > a')
+const activeHref=activeLink?.href
+const activeEpisodeDiv=activeLink?.closest('div[id^="episode-"]')
+const activeEpisodeId=activeEpisodeDiv?.id.replace('episode-','')||''
+const activeDataIdText=document.querySelector(`a[data-id="${activeEpisodeId}"]`)?.textContent.trim()||''
+const selectorFromServer=filteredLinks.map((a,index)=>{const episodeDiv=a.closest('div[id^="episode-"]')
+const episodeId=episodeDiv?.id.replace('episode-','')||''
+const dataIdText=document.querySelector(`a[data-id="${episodeId}"]`)?.textContent.trim()||''
+return{html:dataIdText,value:index,href:a.href,default:a.href===activeHref,}})
+return{movie_id,activeDataIdText,selectorFromServer}}
 function renderPlayer(type,link,id){if(type=='embed'){fetch('/phim/'+movie_slug+'/view')
 document.getElementById('player-wrapper').innerHTML=`<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no" allowfullscreen="" allow='autoplay'></iframe>`}
 if(type=='m3u8'){let timeoutId=null
@@ -18,9 +34,15 @@ let language={vi:{'Video Info':'Thông tin video',Close:'Đóng','Video Load Fai
 let controls=[]
 if(!Artplayer.utils.isMobile){controls=[{position:'left',name:'fast-rewind',index:11,html:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><path fill="currentColor" d="M4 18A12 12 0 1 0 16 6h-4V1L6 7l6 6V8h4A10 10 0 1 1 6 18Z"></path><path fill="currentColor" d="M19.63 22.13a2.84 2.84 0 0 1-1.28-.27a2.44 2.44 0 0 1-.89-.77a3.6 3.6 0 0 1-.52-1.25a7.7 7.7 0 0 1-.17-1.68a8 8 0 0 1 .17-1.68a3.7 3.7 0 0 1 .52-1.25a2.44 2.44 0 0 1 .89-.77a2.84 2.84 0 0 1 1.28-.27a2.44 2.44 0 0 1 2.16 1a5.23 5.23 0 0 1 .7 2.93a5.23 5.23 0 0 1-.7 2.93a2.44 2.44 0 0 1-2.16 1.08m0-1.22a1.07 1.07 0 0 0 1-.55a3.4 3.4 0 0 0 .37-1.51v-1.38a3.3 3.3 0 0 0-.29-1.5a1.23 1.23 0 0 0-2.06 0a3.3 3.3 0 0 0-.29 1.5v1.38a3.4 3.4 0 0 0 .29 1.51a1.06 1.06 0 0 0 .98.55m-9 1.09v-1.18h2v-5.19l-1.86 1l-.55-1.06l2.32-1.3H14v6.5h1.78V22z"></path></svg>',tooltip:'10 giây trước',click:function(){window.player.seek=this.currentTime-10},},{position:'left',name:'fast-forward',index:12,html:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><path fill="currentColor" d="M26 18A10 10 0 1 1 16 8h4v5l6-6l-6-6v5h-4a12 12 0 1 0 12 12Z"></path><path fill="currentColor" d="M19.63 22.13a2.84 2.84 0 0 1-1.28-.27a2.44 2.44 0 0 1-.89-.77a3.6 3.6 0 0 1-.52-1.25a7.7 7.7 0 0 1-.17-1.68a8 8 0 0 1 .17-1.68a3.7 3.7 0 0 1 .52-1.25a2.44 2.44 0 0 1 .89-.77a2.84 2.84 0 0 1 1.28-.27a2.44 2.44 0 0 1 2.16 1a5.23 5.23 0 0 1 .7 2.93a5.23 5.23 0 0 1-.7 2.93a2.44 2.44 0 0 1-2.16 1.08m0-1.22a1.07 1.07 0 0 0 1-.55a3.4 3.4 0 0 0 .37-1.51v-1.38a3.3 3.3 0 0 0-.29-1.5a1.23 1.23 0 0 0-2.06 0a3.3 3.3 0 0 0-.29 1.5v1.38a3.4 3.4 0 0 0 .29 1.51a1.06 1.06 0 0 0 .98.55m-9 1.09v-1.18h2v-5.19l-1.86 1l-.55-1.06l2.32-1.3H14v6.5h1.78V22z"></path></svg>',tooltip:'10 giây sau',click:function(){window.player.seek=this.currentTime+10},},]}
 if(typeof nextSlug!=='undefined'&&nextSlug){controls.push({position:'right',name:'change-video',index:1,html:`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="m4.028 20.882a1 1 0 0 0 1.027-.05l12-8a1 1 0 0 0 0-1.664l-12-8a1 1 0 0 0 -1.555.832v16a1 1 0 0 0 .528.882zm1.472-15.013 9.2 6.131-9.2 6.131z"></path><path fill="#ffffff" d="m19.5 19a1 1 0 0 0 1-1v-12a1 1 0 0 0 -2 0v12a1 1 0 0 0 1 1z"></path></svg>`,tooltip:'Tập tiếp',click:function(){window.location.href=nextSlug},})}
+let autoData=getAudioUrl()
 let settings=[{name:'setting-shutdown',html:'Hẹn giờ ngủ',width:250,tooltip:'Tắt',icon:`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="black"><path d="M12 1a11 11 0 1 0 11 11A11.013 11.013 0 0 0 12 1zm0 20a9 9 0 1 1 9-9a9.01 9.01 0 0 1-9 9zm.5-13h-1v6l5.25 3.15l.5-.86l-4.75-2.79z"/></svg>`,selector:[{default:!0,html:'Tắt',value:0},{html:'5 phút',value:5},{html:'10 phút',value:10},{html:'15 phút',value:15},{html:'30 phút',value:30},],onSelect:function(item){clearTimeout(timeoutId)
 if(item.value>0){timeoutId=setTimeout(()=>{window.player.pause()
 document.querySelector('.art-setting-item[data-name="setting-shutdown"]')?.click()},item.value*60*1000)}
+return item.html},},{name:'setting-audio',html:'Âm thanh',width:250,tooltip:autoData.activeDataIdText,icon:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="18"><path fill="#fff" d="M256 80C149.9 80 62.4 159.4 49.6 262c9.4-3.8 19.6-6 30.4-6c26.5 0 48 21.5 48 48l0 128c0 26.5-21.5 48-48 48c-44.2 0-80-35.8-80-80l0-16 0-48 0-48C0 146.6 114.6 32 256 32s256 114.6 256 256l0 48 0 48 0 16c0 44.2-35.8 80-80 80c-26.5 0-48-21.5-48-48l0-128c0-26.5 21.5-48 48-48c10.8 0 21 2.1 30.4 6C449.6 159.4 362.1 80 256 80z"></path></svg>`,selector:autoData.selectorFromServer,onSelect:function(item){const selected=autoData.selectorFromServer.find((i)=>i.value===item.value)
+if(selected&&selected.href){let position=localStorage.getItem('phim1080-playerposition-'+autoData.movie_id)
+if(position){let movie_id=selected.href.split('/').filter(Boolean).pop().match(/\d+$/)?.[0]
+localStorage.setItem('phim1080-playerposition-'+movie_id,position)}
+window.location.href=selected.href}
 return item.html},},]
 let plugins=[]
 plugins.push(artplayerPluginHlsControl({quality:{control:!1,setting:!0,getName:(level)=>{const h=level.height
@@ -29,7 +51,7 @@ if(h>1080)return'2K'
 if(h>720)return'1080P'
 if(h>480)return'720P'
 if(h>360)return'480P'
-return'360P'},title:'Chất lượng',auto:'Tự động',},audio:{control:!1,setting:!0,getName:(track)=>track.name,title:'Âm thanh',auto:'Tự động',},}))
+return'360P'},title:'Chất lượng',auto:'Tự động',},}))
 if(!Artplayer.utils.isMobile){plugins.push(artplayerPluginAutoThumbnail({width:160,number:100,scale:1,}))}
 if(Artplayer.utils.isMobile){settings.push({name:'setting-gesture',html:'Vuốt để tua',icon:`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" fill="white"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><polygon points="0 0 24 0 24 24 0 24"/><rect fill="#FFFFFF" opacity="0.3" transform="translate(13.000000, 6.000000) rotate(-450.000000) translate(-13.000000, -6.000000)" x="12" y="8.8817842e-16" width="2" height="12" rx="1"/><path d="M9.79289322,3.79289322 C10.1834175,3.40236893 10.8165825,3.40236893 11.2071068,3.79289322 C11.5976311,4.18341751 11.5976311,4.81658249 11.2071068,5.20710678 L8.20710678,8.20710678 C7.81658249,8.59763107 7.18341751,8.59763107 6.79289322,8.20710678 L3.79289322,5.20710678 C3.40236893,4.81658249 3.40236893,4.18341751 3.79289322,3.79289322 C4.18341751,3.40236893 4.81658249,3.40236893 5.20710678,3.79289322 L7.5,6.08578644 L9.79289322,3.79289322 Z" fill="#FFFFFF" fill-rule="nonzero" transform="translate(7.500000, 6.000000) rotate(-270.000000) translate(-7.500000, -6.000000)"/><rect fill="#FFFFFF" opacity="0.3" transform="translate(11.000000, 18.000000) scale(1, -1) rotate(90.000000) translate(-11.000000, -18.000000)" x="10" y="12" width="2" height="12" rx="1"/><path d="M18.7928932,15.7928932 C19.1834175,15.4023689 19.8165825,15.4023689 20.2071068,15.7928932 C20.5976311,16.1834175 20.5976311,16.8165825 20.2071068,17.2071068 L17.2071068,20.2071068 C16.8165825,20.5976311 16.1834175,20.5976311 15.7928932,20.2071068 L12.7928932,17.2071068 C12.4023689,16.8165825 12.4023689,16.1834175 12.7928932,15.7928932 C13.1834175,15.4023689 13.8165825,15.4023689 14.2071068,15.7928932 L16.5,18.0857864 L18.7928932,15.7928932 Z" fill="#FFFFFF" fill-rule="nonzero" transform="translate(16.500000, 18.000000) scale(1, -1) rotate(270.000000) translate(-16.500000, -18.000000)"/></g></svg>`,tooltip:localStorage['phim1080-gesture']=='true'?'Bật':'Tắt',switch:localStorage['phim1080-gesture']=='true',onSwitch:function(item){item.tooltip=item.switch?'Tắt':'Bật'
 localStorage['phim1080-gesture']=!item.switch
