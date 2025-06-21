@@ -187,14 +187,12 @@ function renderPlayer(type, link, id) {
                 tooltip: 'Chuẩn',
                 icon: `<svg width="24" height="24" viewBox="0 0 24 24"><path fill="#fff" d="M10 8v8l6-4zM6.3 5l-.6-.8C7.2 3 9 2.2 11 2l.1 1c-1.8.2-3.4.9-4.8 2M5 6.3l-.8-.6C3 7.2 2.2 9 2 11l1 .1c.2-1.8.9-3.4 2-4.8m0 11.4c-1.1-1.4-1.8-3.1-2-4.8L2 13c.2 2 1 3.8 2.2 5.4zm6.1 3.3c-1.8-.2-3.4-.9-4.8-2l-.6.8C7.2 21 9 21.8 11 22zM22 12c0-5.2-3.9-9.4-9-10l-.1 1c4.6.5 8.1 4.3 8.1 9s-3.5 8.5-8.1 9l.1 1c5.2-.5 9-4.8 9-10" style="--darkreader-inline-fill:#a8a6a4"></path></svg>`,
                 selector: [
-                    { html: '0.25', value: 0.25 },
-                    { html: '0.5', value: 0.5 },
-                    { html: '0.75', value: 0.75 },
+                    { html: 'x0.5', value: 0.5 },
+                    { html: 'x0.75', value: 0.75 },
                     { default: true, html: 'Chuẩn', value: 1 },
-                    { html: '1.25', value: 1.25 },
-                    { html: '1.5', value: 1.5 },
-                    { html: '1.75', value: 1.75 },
-                    { html: '2', value: 2 },
+                    { html: 'x1.25', value: 1.25 },
+                    { html: 'x1.5', value: 1.5 },
+                    { html: 'x2', value: 2 },
                 ],
                 onSelect: function (item) {
                     this.video.playbackRate = item.value;
@@ -221,6 +219,34 @@ function renderPlayer(type, link, id) {
                             window.player.pause()
                             document.querySelector('.art-setting-item[data-name="setting-shutdown"]')?.click()
                         }, item.value * 60 * 1000)
+                    }
+                    return item.html
+                },
+            },
+            {
+                name: 'setting-aspect-ratio',
+                html: 'Thu phóng',
+                width: 250,
+                tooltip: 'Mặc định',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;transform:translate(0,0)" viewBox="0 0 88 88"><defs><clipPath id="a"><path d="M0 0h88v88H0z"></path></clipPath></defs><g clip-path="url('#a')" style="display:block"><path fill="#FFF" d="m12.438-12.702-2.82 2.82c-.79.79-.79 2.05 0 2.83l7.07 7.07-7.07 7.07c-.79.79-.79 2.05 0 2.83l2.82 2.83c.79.78 2.05.78 2.83 0l11.32-11.31c.78-.78.78-2.05 0-2.83l-11.32-11.31c-.78-.79-2.04-.79-2.83 0m-24.88 0c-.74-.74-1.92-.78-2.7-.12l-.13.12-11.31 11.31a2 2 0 0 0-.12 2.7l.12.13 11.31 11.31a2 2 0 0 0 2.7.12l.13-.12 2.83-2.83c.74-.74.78-1.91.11-2.7l-.11-.13-7.07-7.07 7.07-7.07c.74-.74.78-1.91.11-2.7l-.11-.13zM28-28c4.42 0 8 3.58 8 8v40c0 4.42-3.58 8-8 8h-56c-4.42 0-8-3.58-8-8v-40c0-4.42 3.58-8 8-8z" style="--darkreader-inline-fill:#a8a6a4" transform="translate(44 44)"></path></g></svg>`,
+                selector: [
+                    { default: true, html: 'Mặc định', value: 0 },
+                    { html: 'x1.1', value: 1.1 },
+                    { html: 'x1.2', value: 1.2 },
+                    { html: 'x1.3', value: 1.3 },
+                    { html: 'x1.4', value: 1.4 },
+                    { html: 'x1.5', value: 1.5 },
+                ],
+                onSelect: function (item) {
+                    const video = document.querySelector('.art-video');
+                    if (!video) return item.html;
+
+                    if (item.value > 0) {
+                        video.style.transform = `scale(${item.value})`;
+                        video.style.transformOrigin = 'center center';
+                    } else {
+                        video.style.transform = '';
+                        video.style.transformOrigin = '';
                     }
                     return item.html
                 },
