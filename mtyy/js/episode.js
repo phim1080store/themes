@@ -21,4 +21,11 @@ const button=document.querySelector('.intl-album-more-btn')
 if(desc&&button){if(desc.scrollHeight<=desc.clientHeight){button.style.display='none'}else{button.style.display='flex'}
 button.addEventListener('click',function(){if(desc.classList.contains('line-clamp-3')){desc.classList.remove('line-clamp-3')
 this.innerHTML='Ẩn bớt<i class="fa r6 ease"></i>'}else{desc.classList.add('line-clamp-3')
-this.innerHTML='Hiển thị thêm<i class="fa r6 ease"></i>'}})}})
+this.innerHTML='Hiển thị thêm<i class="fa r6 ease"></i>'}})}
+document.querySelector('#share-btn')?.addEventListener('click',function(e){e.preventDefault();let url=window.location.href;let title=document.title;if(navigator.share){navigator.share({title:title,url:url})}else{let shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;window.open(shareUrl,'_blank','width=600,height=400')}});document.querySelector('#collect-btn')?.addEventListener('click',function(e){e.preventDefault()
+let collections=JSON.parse(localStorage['phim1080-collections']||'[]')
+collections=collections.filter((item)=>item.id!==data.id)
+collections.unshift(data)
+collections=collections.slice(0,28)
+localStorage['phim1080-collections']=JSON.stringify(collections)
+Toastify({text:"Đã thêm vào bộ sưu tập",duration:3000,gravity:"bottom",position:"center",backgroundColor:"#0a0c0f",}).showToast()})})
