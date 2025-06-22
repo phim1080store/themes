@@ -288,7 +288,7 @@ function renderPlayer(type, link, id) {
                 },
             }),
         ]
-        if (!('WebKitPlaybackTargetAvailabilityEvent' in window)) {
+        if (navigator.userAgentData ? navigator.userAgentData.brands.some(b => /Chromium|Google Chrome/.test(b.brand)) : /Chrome|Chromium/.test(navigator.userAgent) && !/OPR|Edg/.test(navigator.userAgent)) {
             plugins.push(
                 artplayerPluginChromecast({
                     sdk: 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1',
