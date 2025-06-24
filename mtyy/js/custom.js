@@ -6,7 +6,10 @@ return botPatterns.some((pattern)=>pattern.test(userAgent))}
 function isPC(){let userAgent=navigator.userAgent.toLowerCase()
 let isMobile=/iphone|ipad|android|mobile|blackberry|iemobile|opera mini/.test(userAgent)
 return!isMobile}
-NProgress.configure({showSpinner:!1});window.addEventListener('beforeunload',function(){NProgress.start()});window.addEventListener('load',function(){NProgress.done()});window.addEventListener('pageshow',function(){NProgress.done()});document.addEventListener('DOMContentLoaded',function(){var myLazyLoad=new LazyLoad();myLazyLoad.update();let menuItems=document.querySelectorAll('.head-more-menu')
+NProgress.configure({showSpinner:!1});window.addEventListener('beforeunload',function(){NProgress.start()});window.addEventListener('load',function(){NProgress.done()});window.addEventListener('pageshow',function(){NProgress.done()});document.addEventListener('DOMContentLoaded',function(){var myLazyLoad=new LazyLoad();myLazyLoad.update();axios.defaults.headers.common['X-Requested-With']='XMLHttpRequest'
+let token=document.querySelector('meta[name="csrf-token"]')
+if(token){axios.defaults.headers.common['X-CSRF-TOKEN']=token.content}
+let menuItems=document.querySelectorAll('.head-more-menu')
 menuItems.forEach(function(item){let submenu=item.querySelector('.head-more')
 let link=item.querySelector('.this-get')
 if(submenu){item.addEventListener('mouseenter',function(){submenu.style.display='block'
