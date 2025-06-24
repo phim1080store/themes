@@ -383,7 +383,7 @@ function renderPlayer(type, link, id) {
             },
         })
         window.player.once('video:playing', () => {
-            axios.put('/phim/' + movie_slug + '/view')
+            axios.get('/phim/' + movie_slug + '/view')
         })
         window.player.on('video:pause', function () {
             noSleep.disable()
