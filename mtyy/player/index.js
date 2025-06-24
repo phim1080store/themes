@@ -172,7 +172,6 @@ function renderPlayer(type, link, id) {
             controls.push({
                 position: 'right',
                 name: 'change-video',
-                index: 1,
                 html: `<i class="art-icon"><div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-forward"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg></div></i>`,
                 tooltip: 'Tập tiếp',
                 click: function () {
@@ -307,17 +306,17 @@ function renderPlayer(type, link, id) {
         }
         let layers = [
             {
-                html: `<div class="art-player-top"><div class="p_t-left"><div class="video-info"><div class="name">${data.name}</div><div class="info">${data.episode_name}</div></div></div></div>`,
+                html: `<div class="art-player-top"><div class="p-t-left"><div class="video-info"><div class="name">${data.name}</div><div class="info">${data.episode_name}</div></div></div></div>`,
             },
             {
-                html: `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"><div class="cs-mask opacity-70 cursor-pointer"><svg id="pause-icon" class="v-hidden" width="36" height="36" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2m8 0a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2"></path></svg><svg id="play-icon" width="36" height="36" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.982 9.275 8.06 3.27A2.013 2.013 0 0 0 5 4.994v12.011a2.017 2.017 0 0 0 3.06 1.725l9.922-6.005a2.017 2.017 0 0 0 0-3.45"></path></svg></div></div>`,
+                html: `<div class="cs-mask cursor-pointer"><svg id="pause-icon" width="36" height="36" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 3a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2m8 0a2 2 0 0 0-2 2v12a2 2 0 1 0 4 0V5a2 2 0 0 0-2-2"></path></svg><svg id="play-icon" width="36" height="36" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.982 9.275 8.06 3.27A2.013 2.013 0 0 0 5 4.994v12.011a2.017 2.017 0 0 0 3.06 1.725l9.922-6.005a2.017 2.017 0 0 0 0-3.45"></path></svg></div>`,
                 click: function () {
                     window.player.controls.timer = Date.now()
                     window.player.playing ? window.player.pause() : window.player.play()
                 },
             },
             {
-                html: `<div style="position: absolute; top: 50%; left: 25%; transform: translate(-50%, -50%);"><div class="cs-mask v-hidden opacity-70 cursor-pointer"><svg width="22" height="22" viewBox="0 0 396 430" fill="none" xmlns="http://www.w3.org/2000/svg"> <g fill="currentColor"> <path d="M237.342 26.3129C243.281 20.3742 243.281 10.7449 237.342 4.80589C231.403 -1.13321 221.773 -1.13321 215.835 4.80589L178.779 41.8615C178.72 41.9187 178.661 41.9765 178.603 42.0348C175.633 45.0044 174.148 48.8971 174.149 52.7894C174.148 56.6821 175.633 60.5748 178.603 63.5444C178.661 63.6027 178.72 63.6605 178.779 63.7178L215.835 100.773C221.773 106.713 231.403 106.713 237.342 100.773C243.281 94.8342 243.281 85.205 237.342 79.2663L225.235 67.1593C254.972 72.106 283 85.0372 306.208 104.807C336.452 130.57 356.532 166.263 362.848 205.487C369.165 244.711 361.305 284.903 340.677 318.858C320.05 352.813 288.003 378.312 250.282 390.783C212.56 403.255 171.63 401.885 134.828 386.919C98.0256 371.951 67.7562 344.366 49.4459 309.108C31.1355 273.849 25.9816 233.222 34.9071 194.508C43.8326 155.794 66.2547 121.524 98.1538 97.8413C104.898 92.8343 106.306 83.3091 101.299 76.5649C96.2924 69.8212 86.7666 68.4135 80.0229 73.4199C42.3199 101.412 15.8181 141.916 5.26888 187.674C-5.28085 233.432 0.811443 281.452 22.4528 323.125C44.0947 364.8 79.8708 397.403 123.37 415.093C166.868 432.784 215.246 434.403 259.83 419.662C304.414 404.921 342.292 374.783 366.672 334.65C391.052 294.517 400.343 247.012 392.877 200.651C385.412 154.291 361.679 112.104 325.932 81.653C297.666 57.5743 263.349 42.0784 227.007 36.6477L237.342 26.3129Z"> </path> <path d="M150.883 149.325C150.883 131.568 129.676 122.388 116.729 134.54L90.9877 158.701C84.8635 164.449 84.5588 174.073 90.3069 180.197C96.055 186.321 105.68 186.626 111.803 180.878L120.467 172.746V312.954C120.467 321.354 127.276 328.162 135.675 328.162C144.074 328.162 150.883 321.354 150.883 312.954V149.325Z"> </path> <path fill-rule="evenodd" clip-rule="evenodd" d="M190.579 187.772C190.579 159.154 213.779 135.953 242.398 135.953C271.016 135.953 294.217 159.154 294.217 187.772V276.358C294.217 304.976 271.016 328.176 242.398 328.176C213.779 328.176 190.579 304.976 190.579 276.358V187.772ZM263.801 187.772V276.358C263.801 288.178 254.218 297.761 242.398 297.761C230.577 297.761 220.995 288.178 220.995 276.358V187.772C220.995 175.952 230.577 166.369 242.398 166.369C254.218 166.369 263.801 175.952 263.801 187.772Z"> </path> </g> </svg></div></div>`,
+                html: `<div style="position: absolute; top: 50%; left: 25%; transform: translate(-50%, -50%);"><div class="cs-mask cursor-pointer"><svg width="22" height="22" viewBox="0 0 396 430" fill="none" xmlns="http://www.w3.org/2000/svg"> <g fill="currentColor"> <path d="M237.342 26.3129C243.281 20.3742 243.281 10.7449 237.342 4.80589C231.403 -1.13321 221.773 -1.13321 215.835 4.80589L178.779 41.8615C178.72 41.9187 178.661 41.9765 178.603 42.0348C175.633 45.0044 174.148 48.8971 174.149 52.7894C174.148 56.6821 175.633 60.5748 178.603 63.5444C178.661 63.6027 178.72 63.6605 178.779 63.7178L215.835 100.773C221.773 106.713 231.403 106.713 237.342 100.773C243.281 94.8342 243.281 85.205 237.342 79.2663L225.235 67.1593C254.972 72.106 283 85.0372 306.208 104.807C336.452 130.57 356.532 166.263 362.848 205.487C369.165 244.711 361.305 284.903 340.677 318.858C320.05 352.813 288.003 378.312 250.282 390.783C212.56 403.255 171.63 401.885 134.828 386.919C98.0256 371.951 67.7562 344.366 49.4459 309.108C31.1355 273.849 25.9816 233.222 34.9071 194.508C43.8326 155.794 66.2547 121.524 98.1538 97.8413C104.898 92.8343 106.306 83.3091 101.299 76.5649C96.2924 69.8212 86.7666 68.4135 80.0229 73.4199C42.3199 101.412 15.8181 141.916 5.26888 187.674C-5.28085 233.432 0.811443 281.452 22.4528 323.125C44.0947 364.8 79.8708 397.403 123.37 415.093C166.868 432.784 215.246 434.403 259.83 419.662C304.414 404.921 342.292 374.783 366.672 334.65C391.052 294.517 400.343 247.012 392.877 200.651C385.412 154.291 361.679 112.104 325.932 81.653C297.666 57.5743 263.349 42.0784 227.007 36.6477L237.342 26.3129Z"> </path> <path d="M150.883 149.325C150.883 131.568 129.676 122.388 116.729 134.54L90.9877 158.701C84.8635 164.449 84.5588 174.073 90.3069 180.197C96.055 186.321 105.68 186.626 111.803 180.878L120.467 172.746V312.954C120.467 321.354 127.276 328.162 135.675 328.162C144.074 328.162 150.883 321.354 150.883 312.954V149.325Z"> </path> <path fill-rule="evenodd" clip-rule="evenodd" d="M190.579 187.772C190.579 159.154 213.779 135.953 242.398 135.953C271.016 135.953 294.217 159.154 294.217 187.772V276.358C294.217 304.976 271.016 328.176 242.398 328.176C213.779 328.176 190.579 304.976 190.579 276.358V187.772ZM263.801 187.772V276.358C263.801 288.178 254.218 297.761 242.398 297.761C230.577 297.761 220.995 288.178 220.995 276.358V187.772C220.995 175.952 230.577 166.369 242.398 166.369C254.218 166.369 263.801 175.952 263.801 187.772Z"> </path> </g> </svg></div></div>`,
                 disable: !Artplayer.utils.isMobile,
                 click: function () {
                     window.player.controls.timer = Date.now()
@@ -325,7 +324,7 @@ function renderPlayer(type, link, id) {
                 },
             },
             {
-                html: `<div style="position: absolute; top: 50%; right: 25%; transform: translate(50%, -50%);"><div class="cs-mask v-hidden text-white opacity-70 cursor-pointer"><svg width="22" height="22" viewBox="0 0 396 430" fill="none" xmlns="http://www.w3.org/2000/svg"> <g fill="currentColor"> <path d="M158.267 26.3129C152.327 20.3742 152.327 10.7449 158.267 4.80589C164.206 -1.13321 173.835 -1.13321 179.774 4.80589L216.829 41.8615C216.889 41.9187 216.947 41.9765 217.005 42.0348C219.975 45.0044 221.46 48.8971 221.46 52.7894C221.46 56.6821 219.975 60.5748 217.005 63.5444C216.947 63.6027 216.889 63.6605 216.829 63.7178L179.774 100.773C173.835 106.713 164.206 106.713 158.267 100.773C152.327 94.8342 152.327 85.205 158.267 79.2663L170.374 67.1593C140.637 72.106 112.608 85.0372 89.4001 104.807C59.1561 130.57 39.0766 166.263 32.7602 205.487C26.4439 244.711 34.3038 284.903 54.9314 318.858C75.5589 352.813 107.605 378.312 145.327 390.783C183.048 403.255 223.978 401.885 260.781 386.919C297.583 371.951 327.852 344.366 346.163 309.108C364.473 273.849 369.627 233.222 360.701 194.508C351.776 155.794 329.354 121.524 297.455 97.8413C290.711 92.8343 289.303 83.3091 294.31 76.5649C299.316 69.8212 308.842 68.4135 315.585 73.4199C353.288 101.412 379.79 141.916 390.34 187.674C400.889 233.432 394.797 281.452 373.156 323.125C351.514 364.8 315.738 397.403 272.239 415.093C228.74 432.784 180.363 434.403 135.778 419.662C91.1941 404.921 53.3168 374.783 28.9365 334.65C4.55614 294.517 -4.73438 247.012 2.73119 200.651C10.1968 154.291 33.9297 112.104 69.6765 81.653C97.9424 57.5743 132.259 42.0784 168.601 36.6477L158.267 26.3129Z"> </path> <path d="M150.883 149.325C150.883 131.568 129.676 122.388 116.729 134.54L90.9877 158.701C84.8635 164.449 84.5588 174.073 90.3069 180.197C96.055 186.321 105.68 186.626 111.803 180.878L120.467 172.746V312.954C120.467 321.354 127.276 328.162 135.675 328.162C144.074 328.162 150.883 321.354 150.883 312.954V149.325Z"> </path> <path fill-rule="evenodd" clip-rule="evenodd" d="M190.579 187.772C190.579 159.154 213.779 135.953 242.398 135.953C271.016 135.953 294.217 159.154 294.217 187.772V276.358C294.217 304.976 271.016 328.176 242.398 328.176C213.779 328.176 190.579 304.976 190.579 276.358V187.772ZM263.801 187.772V276.358C263.801 288.178 254.218 297.761 242.398 297.761C230.577 297.761 220.995 288.178 220.995 276.358V187.772C220.995 175.952 230.577 166.369 242.398 166.369C254.218 166.369 263.801 175.952 263.801 187.772Z"> </path> </g> </svg></div></div>`,
+                html: `<div style="position: absolute; top: 50%; right: 25%; transform: translate(50%, -50%);"><div class="cs-mask cursor-pointer"><svg width="22" height="22" viewBox="0 0 396 430" fill="none" xmlns="http://www.w3.org/2000/svg"> <g fill="currentColor"> <path d="M158.267 26.3129C152.327 20.3742 152.327 10.7449 158.267 4.80589C164.206 -1.13321 173.835 -1.13321 179.774 4.80589L216.829 41.8615C216.889 41.9187 216.947 41.9765 217.005 42.0348C219.975 45.0044 221.46 48.8971 221.46 52.7894C221.46 56.6821 219.975 60.5748 217.005 63.5444C216.947 63.6027 216.889 63.6605 216.829 63.7178L179.774 100.773C173.835 106.713 164.206 106.713 158.267 100.773C152.327 94.8342 152.327 85.205 158.267 79.2663L170.374 67.1593C140.637 72.106 112.608 85.0372 89.4001 104.807C59.1561 130.57 39.0766 166.263 32.7602 205.487C26.4439 244.711 34.3038 284.903 54.9314 318.858C75.5589 352.813 107.605 378.312 145.327 390.783C183.048 403.255 223.978 401.885 260.781 386.919C297.583 371.951 327.852 344.366 346.163 309.108C364.473 273.849 369.627 233.222 360.701 194.508C351.776 155.794 329.354 121.524 297.455 97.8413C290.711 92.8343 289.303 83.3091 294.31 76.5649C299.316 69.8212 308.842 68.4135 315.585 73.4199C353.288 101.412 379.79 141.916 390.34 187.674C400.889 233.432 394.797 281.452 373.156 323.125C351.514 364.8 315.738 397.403 272.239 415.093C228.74 432.784 180.363 434.403 135.778 419.662C91.1941 404.921 53.3168 374.783 28.9365 334.65C4.55614 294.517 -4.73438 247.012 2.73119 200.651C10.1968 154.291 33.9297 112.104 69.6765 81.653C97.9424 57.5743 132.259 42.0784 168.601 36.6477L158.267 26.3129Z"> </path> <path d="M150.883 149.325C150.883 131.568 129.676 122.388 116.729 134.54L90.9877 158.701C84.8635 164.449 84.5588 174.073 90.3069 180.197C96.055 186.321 105.68 186.626 111.803 180.878L120.467 172.746V312.954C120.467 321.354 127.276 328.162 135.675 328.162C144.074 328.162 150.883 321.354 150.883 312.954V149.325Z"> </path> <path fill-rule="evenodd" clip-rule="evenodd" d="M190.579 187.772C190.579 159.154 213.779 135.953 242.398 135.953C271.016 135.953 294.217 159.154 294.217 187.772V276.358C294.217 304.976 271.016 328.176 242.398 328.176C213.779 328.176 190.579 304.976 190.579 276.358V187.772ZM263.801 187.772V276.358C263.801 288.178 254.218 297.761 242.398 297.761C230.577 297.761 220.995 288.178 220.995 276.358V187.772C220.995 175.952 230.577 166.369 242.398 166.369C254.218 166.369 263.801 175.952 263.801 187.772Z"> </path> </g> </svg></div></div>`,
                 disable: !Artplayer.utils.isMobile,
                 click: function () {
                     window.player.controls.timer = Date.now()
@@ -380,67 +379,28 @@ function renderPlayer(type, link, id) {
                 pip: '<div class="inc-icon"><svg width="98" height="98" viewBox="0 0 98 98" fill="#fff" xmlns="http://www.w3.org/2000/svg"> <path d="M4.08334 14.1667C4.08334 10.853 6.76964 8.16675 10.0833 8.16675H75.6667C78.9804 8.16675 81.6667 10.853 81.6667 14.1667V35.6251C81.6667 37.374 80.2489 38.7917 78.5 38.7918V38.7918V38.7918C76.8432 38.7918 75.5 37.4486 75.5 35.7918V26.5V20.5C75.5 17.1863 72.8137 14.5 69.5 14.5L17 14.5C13.6863 14.5 11 17.1863 11 20.5V56.5C11 59.8137 13.6863 62.5 17 62.5L21 62.5C22.933 62.5 24.5 64.067 24.5 66V66V66C24.5 67.887 22.9703 69.4167 21.0833 69.4167H10.0833C6.76963 69.4167 4.08334 66.7305 4.08334 63.4167V14.1667Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M36.75 53.0833C36.75 50.8282 38.5782 49 40.8333 49H89.8333C92.0885 49 93.9167 50.8282 93.9167 53.0833V85.75C93.9167 88.0052 92.0885 89.8333 89.8333 89.8333H40.8333C38.5782 89.8333 36.75 88.0052 36.75 85.75V53.0833ZM49 57.1667C46.7448 57.1667 44.9167 58.9948 44.9167 61.25V77.5833C44.9167 79.8385 46.7448 81.6667 49 81.6667H81.6667C83.9218 81.6667 85.75 79.8385 85.75 77.5833V61.25C85.75 58.9948 83.9218 57.1667 81.6667 57.1667H49Z" fill="currentColor"></path> <path d="M40.8333 53.0833H89.8333V85.75H40.8333V53.0833Z" fill="currentColor"> </path> </svg></div>',
                 setting: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> </svg></div>',
                 airplay: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg></div>',
+                loading: '<svg width="36" height="36" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_P7sC{transform-origin:center;animation:spinner_svv2 .75s infinite linear}@keyframes spinner_svv2{100%{transform:rotate(360deg)}}</style><path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" class="spinner_P7sC"/></svg>',
             },
         })
-        let waitingTimeout = null
-        let isWaiting = false
-        window.player.on('video:waiting', () => {
-            isWaiting = true
-            clearTimeout(waitingTimeout)
-            waitingTimeout = setTimeout(() => {
-                if (isWaiting) {
-                    window.player.notice.show = 'Sử dụng 1.1.1.1 để xem nếu thấy lag'
-                }
-            }, 5000)
+        window.player.once('video:playing', () => {
+            axios.put('/phim/' + movie_slug + '/view')
         })
-        window.player.on('loading', function () {
-            document.getElementById('play-icon')?.classList.add('v-hidden')
-            document.getElementById('pause-icon')?.classList.add('v-hidden')
-        })
-        window.player.on('pause', function () {
-            isPaused = true
+        window.player.on('video:pause', function () {
             noSleep.disable()
-            document.querySelectorAll('.cs-mask').forEach((el) => el.classList.remove('v-hidden'))
-            document.getElementById('play-icon')?.classList.remove('v-hidden')
-            document.getElementById('pause-icon')?.classList.add('v-hidden')
         })
-        window.player.on('play', function () {
-            isPaused = false
+        window.player.on('video:play', function () {
             noSleep.enable()
-            document.querySelectorAll('.cs-mask').forEach((el) => el.classList.remove('v-hidden'))
-            document.getElementById('play-icon')?.classList.add('v-hidden')
-            document.getElementById('pause-icon')?.classList.remove('v-hidden')
         })
-        window.player.on('control', () => {
-            if (window.player.isLock) {
-                document.querySelectorAll('.cs-mask').forEach((el) => el.classList.add('v-hidden'))
-            } else {
-                document.querySelectorAll('.cs-mask').forEach((el) => el.classList.remove('v-hidden'))
-            }
-        })
-        window.player.on('lock', () => {
-            if (window.player.isLock) {
-                document.querySelectorAll('.cs-mask').forEach((el) => el.classList.add('v-hidden'))
-            } else {
-                document.querySelectorAll('.cs-mask').forEach((el) => el.classList.remove('v-hidden'))
-            }
-        })
-        window.player.on('video:playing', () => {
-            isWaiting = false
+        window.player.on('video:ended', () => {
+            noSleep.disable()
         })
         window.player.on('video:progress', () => {
             if (!window.player.currentTime) return
             localStorage.setItem(resumeKey, window.player.currentTime)
         })
-        window.player.on('video:ended', () => {
-            noSleep.disable()
-        })
         window.player.on('ready', () => {
-            fetch('/phim/' + movie_slug + '/view')
             var progress = parseFloat(localStorage.getItem(resumeKey))
-            if (isNaN(progress)) {
-                progress = 0
-            }
+            if (isNaN(progress)) progress = 0
             window.player.seek = progress
             try {
                 let histories = JSON.parse(localStorage['phim1080-histories'] || '[]')
@@ -453,34 +413,12 @@ function renderPlayer(type, link, id) {
                 localStorage.removeItem('phim1080-histories')
             }
         })
-        let artVideoPlayer = document.querySelector('.art-video-player')
-        let csMasks = document.querySelectorAll('.cs-mask')
-        let playIcon = document.getElementById('play-icon')
-        let pauseIcon = document.getElementById('pause-icon')
-        new MutationObserver(function (mutationsList) {
-            mutationsList.forEach((mutation) => {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                    let classList = artVideoPlayer.classList
-                    if (classList.contains('art-hide-cursor')) {
-                        csMasks.forEach((el) => el.classList.add('v-hidden'))
-                    } else if (!classList.contains('art-loading-show')) {
-                        if (window.player.playing) {
-                            playIcon?.classList.add('v-hidden')
-                            pauseIcon?.classList.remove('v-hidden')
-                        } else {
-                            playIcon?.classList.remove('v-hidden')
-                            pauseIcon?.classList.add('v-hidden')
-                        }
-                    }
-                }
-            })
-        }).observe(artVideoPlayer, { attributes: true })
         new MutationObserver((mutationsList) => {
             let artNoticeInner = document.querySelector('.art-notice-inner')
             mutationsList.forEach((mutation) => {
                 if (mutation.type === 'characterData' || mutation.type === 'childList') {
                     let text = artNoticeInner.textContent.trim()
-                    if (text.includes('Error') || text.includes('1.1.1.1') || text.includes('Mất mạng, đang thử kết nối lại...') || text.includes('Lỗi media, đang khôi phục...') || text.includes('Lỗi nghiêm trọng, dừng phát...')) {
+                    if (text.includes('Error') || text.includes('Mất mạng, đang thử kết nối lại...') || text.includes('Lỗi media, đang khôi phục...') || text.includes('Lỗi nghiêm trọng, dừng phát...')) {
                         artNoticeInner.classList.remove('v-hidden')
                     } else {
                         artNoticeInner.classList.add('v-hidden')
@@ -494,7 +432,6 @@ function renderPlayer(type, link, id) {
         })
     }
 }
-
 document.addEventListener('DOMContentLoaded', function () {
     if (!isBot()) {
         let tokens = ['5f7fbb2a8afb4b', '1b6a79055dd6a8']

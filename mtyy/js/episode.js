@@ -23,9 +23,10 @@ button.addEventListener('click',function(){if(desc.classList.contains('line-clam
 this.innerHTML='Ẩn bớt<i class="fa r6 ease"></i>'}else{desc.classList.add('line-clamp-3')
 this.innerHTML='Hiển thị thêm<i class="fa r6 ease"></i>'}})}
 document.querySelector('#share-btn')?.addEventListener('click',function(e){e.preventDefault();let url=window.location.href;let title=document.title;if(navigator.share){navigator.share({title:title,url:url})}else{let shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;window.open(shareUrl,'_blank','width=600,height=400')}});document.querySelector('#collect-btn')?.addEventListener('click',function(e){e.preventDefault()
-let collections=JSON.parse(localStorage['phim1080-collections']||'[]')
+data.href=window.location.protocol+'//'+window.location.host+'/phim/'+movie_slug;let collections=JSON.parse(localStorage['phim1080-collections']||'[]')
 collections=collections.filter((item)=>item.id!==data.id)
 collections.unshift(data)
 collections=collections.slice(0,28)
 localStorage['phim1080-collections']=JSON.stringify(collections)
-Toastify({text:"Đã thêm vào bộ sưu tập",duration:3000,gravity:"bottom",position:"center",backgroundColor:"#0a0c0f",}).showToast()})})
+Toastify({text:"Đã thêm vào bộ sưu tập",duration:3000,gravity:"bottom",position:"center",backgroundColor:"#0a0c0f",}).showToast()});MicroModal.init()
+let form=document.getElementById('report-form');let textarea=document.getElementById('report-message');let submitBtn=form.querySelector('button[type="submit"]');form.addEventListener('submit',function(e){e.preventDefault();let message=textarea.value.trim();if(!message)return;submitBtn.disabled=!0;axios.post('/phim/'+movie_slug+'/'+data.episode_id+'/report',{message}).then(()=>{textarea.value=''}).finally(()=>{setTimeout(()=>{submitBtn.disabled=!1},3000)});MicroModal.close('modal-report');Toastify({text:"Gửi báo lỗi thành công",duration:3000,gravity:"bottom",position:"center",backgroundColor:"#0a0c0f",}).showToast()})})
