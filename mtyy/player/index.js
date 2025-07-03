@@ -12,7 +12,7 @@ function getNextPrevEpisode(isNext) {
 
 function getAudioUrl(type = 'single') {
     if (type === 'single') {
-        let href = document.querySelector('.player-list-box a.active')?.getAttribute('href')
+        let href = document.querySelector('.player-list-box a.choose')?.getAttribute('href')
         let slug = href?.replace(/-\d+$/, '-')
         let movie_id = href?.split('/').filter(Boolean).pop().match(/\d+$/)?.[0]
 
@@ -22,7 +22,7 @@ function getAudioUrl(type = 'single') {
             return dataId?.startsWith(slug)
         })
 
-        let activeEpisodeDiv = document.querySelector('.player-list-box a.active')
+        let activeEpisodeDiv = document.querySelector('.player-list-box a.choose')
         let activeEpisodeId = activeEpisodeDiv?.id.replace('episode-', '') || ''
         let activeDataIdText = document.querySelector(`#episode-${activeEpisodeId} .server-name`)?.textContent.trim() || ''
 
