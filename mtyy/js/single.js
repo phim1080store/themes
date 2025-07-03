@@ -23,17 +23,32 @@ let response=histories.find((item)=>item.id==data.id)
 if(response?.href){const btn=document.querySelector('.vod-detail-bnt')
 if(btn){btn.innerHTML='<i class="fa r6 ds-bofang1"></i> Xem tiếp'
 btn.setAttribute('href',response.href)}
-let activeLink=document.querySelector('.player-list-box a[href="'+response.href+'"]');if(activeLink){activeLink.classList.add('on');const dataId=activeLink.getAttribute('data-id');if(dataId){const serverLink=document.querySelector(`.anthology-tab a[data-id="${dataId}"]`);if(serverLink)serverLink.classList.add('active');}}}
+if(data.type==='series'){let activeLink=document.querySelector('.player-list-box a[href="'+response.href+'"]')
+if(activeLink){document.querySelectorAll('.vod-playerUrl').forEach((el)=>{el.classList.remove('active')})
+document.querySelectorAll('[id^="episode-"]').forEach((el)=>{el.classList.add('none')})
+activeLink.classList.add('on')
+let activeEpisodeDiv=activeLink?.closest('div[id^="episode-"]')
+let activeEpisodeId=activeEpisodeDiv?.id.replace('episode-','')||''
+document.querySelector(`button[data-id="${activeEpisodeId}"]`)?.classList.add('active')
+document.querySelector(`#episode-${activeEpisodeId}`)?.classList.remove('none')
+const dataId=activeLink.getAttribute('data-id')
+if(dataId){const serverLink=document.querySelector(`.anthology-tab a[data-id="${dataId}"]`)
+if(serverLink)serverLink.classList.add('active')}}}}
 let desc=document.querySelector('.banner-content__desc')
 let button=document.querySelector('.intl-album-more-btn')
 if(desc&&button){if(desc.scrollHeight<=desc.clientHeight){button.style.display='none'}else{button.style.display='flex'}
 button.addEventListener('click',function(){if(desc.classList.contains('line-clamp-3')){desc.classList.remove('line-clamp-3')
 button.innerHTML='Ẩn bớt<i class="fa r6 ease"></i>'}else{desc.classList.add('line-clamp-3')
 button.innerHTML='Hiển thị thêm<i class="fa r6 ease"></i>'}})}
-document.querySelector('#share-btn')?.addEventListener('click',function(e){e.preventDefault();let url=window.location.href;let title=document.title;if(navigator.share){navigator.share({title:title,url:url})}else{let shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;window.open(shareUrl,'_blank','width=600,height=400')}});document.querySelector('#collect-btn')?.addEventListener('click',function(e){e.preventDefault()
+document.querySelector('#share-btn')?.addEventListener('click',function(e){e.preventDefault()
+let url=window.location.href
+let title=document.title
+if(navigator.share){navigator.share({title:title,url:url,})}else{let shareUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
+window.open(shareUrl,'_blank','width=600,height=400')}})
+document.querySelector('#collect-btn')?.addEventListener('click',function(e){e.preventDefault()
 let collections=JSON.parse(localStorage['phim1080-collections']||'[]')
 collections=collections.filter((item)=>item.id!==data.id)
 collections.unshift(data)
 collections=collections.slice(0,28)
 localStorage['phim1080-collections']=JSON.stringify(collections)
-Toastify({text:"Đã thêm vào bộ sưu tập",duration:3000,gravity:"bottom",position:"center",backgroundColor:"#0a0c0f",}).showToast()})})
+Toastify({text:'Đã thêm vào bộ sưu tập',duration:3000,gravity:'bottom',position:'center',backgroundColor:'#0a0c0f',}).showToast()})})
