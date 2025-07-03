@@ -10,7 +10,36 @@ function getNextPrevEpisode(isNext) {
     return url.substring(0, url.lastIndexOf('/')) + `/${episodes[newIndex].slug}-${episodes[newIndex].id}`
 }
 
-function getAudioUrl() {
+function getAudioUrl(type = 'single') {
+    if (type === 'single') {
+        let href = document.querySelector('.player-list-box a.active')?.getAttribute('href')
+        let slug = href?.replace(/-\d+$/, '-')
+        let movie_id = href?.split('/').filter(Boolean).pop().match(/\d+$/)?.[0]
+
+        let allLinks = Array.from(document.querySelectorAll('a[id^="episode-"]'))
+        let filteredLinks = allLinks.filter((a) => {
+            let dataId = a.getAttribute('href')
+            return dataId?.startsWith(slug)
+        })
+
+        let activeEpisodeDiv = document.querySelector('.player-list-box a.active')
+        let activeEpisodeId = activeEpisodeDiv?.id.replace('episode-', '') || ''
+        let activeDataIdText = document.querySelector(`#episode-${activeEpisodeId} .server-name`)?.textContent.trim() || ''
+
+        let selectorFromServer = filteredLinks.map((a, index) => {
+            let episodeId = a?.id.replace('episode-', '') || ''
+            let dataIdText = document.querySelector(`#episode-${episodeId} .server-name`)?.textContent.trim() || ''
+
+            return {
+                html: dataIdText == 'Vietsub' ? 'Tiếng gốc' : dataIdText,
+                value: index,
+                href: a.href,
+                default: a.href === href,
+            }
+        })
+
+        return { movie_id, activeDataIdText, selectorFromServer }
+    }
     let href = document.querySelector('li.on > a')?.getAttribute('href')
     let slug = href?.replace(/-\d+$/, '-')
     let movie_id = href?.split('/').filter(Boolean).pop().match(/\d+$/)?.[0]
@@ -108,7 +137,7 @@ function renderPlayer(type, link, id) {
         let timeoutId = null
         let resumeKey = 'phim1080-playerposition-' + id
         let nextSlug = getNextPrevEpisode(true)
-        let autoData = getAudioUrl()
+        let autoData = getAudioUrl(data.type)
         let noSleep = new NoSleep()
         let language = {
             vi: {
@@ -201,8 +230,8 @@ function renderPlayer(type, link, id) {
                     { html: '2x', value: 2 },
                 ],
                 onSelect: function (item) {
-                    this.video.playbackRate = item.value;
-                    return item.html;
+                    this.video.playbackRate = item.value
+                    return item.html
                 },
             },
             {
@@ -218,15 +247,15 @@ function renderPlayer(type, link, id) {
                     { html: '1.3x', value: 1.3 },
                 ],
                 onSelect: function (item) {
-                    let video = document.querySelector('.art-video');
-                    if (!video) return item.html;
+                    let video = document.querySelector('.art-video')
+                    if (!video) return item.html
 
                     if (item.value > 0) {
-                        video.style.transform = `scale(${item.value})`;
-                        video.style.transformOrigin = 'center center';
+                        video.style.transform = `scale(${item.value})`
+                        video.style.transformOrigin = 'center center'
                     } else {
-                        video.style.transform = '';
-                        video.style.transformOrigin = '';
+                        video.style.transform = ''
+                        video.style.transformOrigin = ''
                     }
                     return item.html
                 },
@@ -275,7 +304,7 @@ function renderPlayer(type, link, id) {
                     }
                     return item.html
                 },
-            }
+            },
         ]
         let plugins = [
             artplayerPluginHlsControl({
@@ -284,16 +313,11 @@ function renderPlayer(type, link, id) {
                     setting: true,
                     title: 'Chất lượng',
                     auto: 'Tự động',
-                    getName: ({ height: h }) =>
-                        h > 1440 ? '4K' :
-                        h > 1080 ? '2K' :
-                        h > 720  ? '1080P' :
-                        h > 480  ? '720P' :
-                        h > 360  ? '480P' : '360P',
+                    getName: ({ height: h }) => (h > 1440 ? '4K' : h > 1080 ? '2K' : h > 720 ? '1080P' : h > 480 ? '720P' : h > 360 ? '480P' : '360P'),
                 },
             }),
         ]
-        if (navigator.userAgentData ? navigator.userAgentData.brands.some(b => /Chromium|Google Chrome/.test(b.brand)) : /Chrome|Chromium/.test(navigator.userAgent) && !/OPR|Edg/.test(navigator.userAgent)) {
+        if (navigator.userAgentData ? navigator.userAgentData.brands.some((b) => /Chromium|Google Chrome/.test(b.brand)) : /Chrome|Chromium/.test(navigator.userAgent) && !/OPR|Edg/.test(navigator.userAgent)) {
             plugins.push(
                 artplayerPluginChromecast({
                     sdk: 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1',
@@ -371,21 +395,29 @@ function renderPlayer(type, link, id) {
                 crossOrigin: 'anonymous',
             },
             customType: {
-                m3u8: playM3u8
+                m3u8: playM3u8,
             },
             icons: {
-                fullscreenOn: '<div class="inc-icon"><svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M18.73 55C21.3421 55 23.4601 53.1121 23.4601 50.5L23.4601 27.4601L48 27.4601C50.6121 27.4601 53 25.3421 53 22.7301C53 20.118 50.6121 18 48 18L18.73 18C16.118 18 14 20.118 14 22.73L14 50.5C14 53.1121 16.118 55 18.73 55Z" fill="currentColor"></path> <path d="M53.9997 105.27C53.9997 102.658 51.6118 100.54 48.9997 100.54L23.4601 100.54L23.4601 78C23.4601 75.3879 21.3421 73 18.73 73C16.118 73 14 75.3879 14 78L14 105.27C14 107.882 16.118 110 18.73 110L48.9997 110C51.6118 110 53.9997 107.882 53.9997 105.27Z" fill="currentColor"></path> <path d="M74 22.73C74 25.3421 76.3879 27.4601 79 27.4601L104.54 27.46L104.54 50C104.54 52.6121 106.658 55 109.27 55C111.882 55 114 52.6121 114 50L114 22.73C114 20.118 111.882 18 109.27 18L79 18C76.3879 18 74 20.118 74 22.73Z" fill="currentColor"></path> <path d="M109.27 72C106.658 72 104.54 74.3879 104.54 77V100.54L80 100.54C77.3879 100.54 75 102.658 75 105.27C75 107.882 77.3879 110 80 110L109.27 110C111.882 110 114 107.882 114 105.27V77C114 74.3879 111.882 72 109.27 72Z" fill="currentColor"></path> </svg></div>',
-                fullscreenOff: '<div class="inc-icon"><svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M79.73 111C82.3421 111 84.4601 108.112 84.4601 105.5L84.4601 84.4601L109 84.4601C111.612 84.4601 114 82.3421 114 79.73C114 77.118 111.612 75 109 75L79.73 75C77.118 75 75 77.118 75 79.73L75 105.5C75 108.112 77.118 111 79.73 111Z" fill="currentColor"></path> <path d="M114 48.27C114 45.6579 111.612 43.5399 109 43.5399L83.4601 43.5399L83.4601 23C83.4601 20.3879 81.3421 18 78.73 18C76.118 18 74 20.3879 74 23L74 48.27C74 50.882 76.118 53 78.73 53L109 53C111.612 53 114 50.882 114 48.27Z" fill="currentColor"></path> <path d="M14 79.73C14 82.3421 16.3879 84.46 19 84.46L44.5396 84.46L44.5396 105.5C44.5396 108.112 46.6576 110.5 49.2697 110.5C51.8818 110.5 53.9997 108.112 53.9997 105.5L53.9997 79.73C53.9997 77.118 51.8818 75 49.2697 75L19 75C16.3879 75 14 77.118 14 79.73Z" fill="currentColor"></path> <path d="M48.27 18C45.6579 18 43.5399 20.3879 43.5399 23V44.5396L19 44.5396C16.3879 44.5396 14 46.6576 14 49.2697C14 51.8818 16.3879 53.9997 19 53.9997L48.27 53.9997C50.882 53.9997 53 51.8818 53 49.2697L53 23C53 20.3879 50.882 18 48.27 18Z" fill="currentColor"></path> </svg></div>',
-                fullscreenWebOn: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize-2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></div>',
-                fullscreenWebOff: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minimize-2"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></div>',
+                fullscreenOn:
+                    '<div class="inc-icon"><svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M18.73 55C21.3421 55 23.4601 53.1121 23.4601 50.5L23.4601 27.4601L48 27.4601C50.6121 27.4601 53 25.3421 53 22.7301C53 20.118 50.6121 18 48 18L18.73 18C16.118 18 14 20.118 14 22.73L14 50.5C14 53.1121 16.118 55 18.73 55Z" fill="currentColor"></path> <path d="M53.9997 105.27C53.9997 102.658 51.6118 100.54 48.9997 100.54L23.4601 100.54L23.4601 78C23.4601 75.3879 21.3421 73 18.73 73C16.118 73 14 75.3879 14 78L14 105.27C14 107.882 16.118 110 18.73 110L48.9997 110C51.6118 110 53.9997 107.882 53.9997 105.27Z" fill="currentColor"></path> <path d="M74 22.73C74 25.3421 76.3879 27.4601 79 27.4601L104.54 27.46L104.54 50C104.54 52.6121 106.658 55 109.27 55C111.882 55 114 52.6121 114 50L114 22.73C114 20.118 111.882 18 109.27 18L79 18C76.3879 18 74 20.118 74 22.73Z" fill="currentColor"></path> <path d="M109.27 72C106.658 72 104.54 74.3879 104.54 77V100.54L80 100.54C77.3879 100.54 75 102.658 75 105.27C75 107.882 77.3879 110 80 110L109.27 110C111.882 110 114 107.882 114 105.27V77C114 74.3879 111.882 72 109.27 72Z" fill="currentColor"></path> </svg></div>',
+                fullscreenOff:
+                    '<div class="inc-icon"><svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M79.73 111C82.3421 111 84.4601 108.112 84.4601 105.5L84.4601 84.4601L109 84.4601C111.612 84.4601 114 82.3421 114 79.73C114 77.118 111.612 75 109 75L79.73 75C77.118 75 75 77.118 75 79.73L75 105.5C75 108.112 77.118 111 79.73 111Z" fill="currentColor"></path> <path d="M114 48.27C114 45.6579 111.612 43.5399 109 43.5399L83.4601 43.5399L83.4601 23C83.4601 20.3879 81.3421 18 78.73 18C76.118 18 74 20.3879 74 23L74 48.27C74 50.882 76.118 53 78.73 53L109 53C111.612 53 114 50.882 114 48.27Z" fill="currentColor"></path> <path d="M14 79.73C14 82.3421 16.3879 84.46 19 84.46L44.5396 84.46L44.5396 105.5C44.5396 108.112 46.6576 110.5 49.2697 110.5C51.8818 110.5 53.9997 108.112 53.9997 105.5L53.9997 79.73C53.9997 77.118 51.8818 75 49.2697 75L19 75C16.3879 75 14 77.118 14 79.73Z" fill="currentColor"></path> <path d="M48.27 18C45.6579 18 43.5399 20.3879 43.5399 23V44.5396L19 44.5396C16.3879 44.5396 14 46.6576 14 49.2697C14 51.8818 16.3879 53.9997 19 53.9997L48.27 53.9997C50.882 53.9997 53 51.8818 53 49.2697L53 23C53 20.3879 50.882 18 48.27 18Z" fill="currentColor"></path> </svg></div>',
+                fullscreenWebOn:
+                    '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize-2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></div>',
+                fullscreenWebOff:
+                    '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minimize-2"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></div>',
                 volume: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></div>',
-                volumeClose: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg></div>',
+                volumeClose:
+                    '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg></div>',
                 pause: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></div>',
                 play: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div>',
                 pip: '<div class="inc-icon"><svg width="98" height="98" viewBox="0 0 98 98" fill="#fff" xmlns="http://www.w3.org/2000/svg"> <path d="M4.08334 14.1667C4.08334 10.853 6.76964 8.16675 10.0833 8.16675H75.6667C78.9804 8.16675 81.6667 10.853 81.6667 14.1667V35.6251C81.6667 37.374 80.2489 38.7917 78.5 38.7918V38.7918V38.7918C76.8432 38.7918 75.5 37.4486 75.5 35.7918V26.5V20.5C75.5 17.1863 72.8137 14.5 69.5 14.5L17 14.5C13.6863 14.5 11 17.1863 11 20.5V56.5C11 59.8137 13.6863 62.5 17 62.5L21 62.5C22.933 62.5 24.5 64.067 24.5 66V66V66C24.5 67.887 22.9703 69.4167 21.0833 69.4167H10.0833C6.76963 69.4167 4.08334 66.7305 4.08334 63.4167V14.1667Z" fill="currentColor"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M36.75 53.0833C36.75 50.8282 38.5782 49 40.8333 49H89.8333C92.0885 49 93.9167 50.8282 93.9167 53.0833V85.75C93.9167 88.0052 92.0885 89.8333 89.8333 89.8333H40.8333C38.5782 89.8333 36.75 88.0052 36.75 85.75V53.0833ZM49 57.1667C46.7448 57.1667 44.9167 58.9948 44.9167 61.25V77.5833C44.9167 79.8385 46.7448 81.6667 49 81.6667H81.6667C83.9218 81.6667 85.75 79.8385 85.75 77.5833V61.25C85.75 58.9948 83.9218 57.1667 81.6667 57.1667H49Z" fill="currentColor"></path> <path d="M40.8333 53.0833H89.8333V85.75H40.8333V53.0833Z" fill="currentColor"> </path> </svg></div>',
-                setting: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> </svg></div>',
-                airplay: '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg></div>',
-                loading: '<svg width="36" height="36" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_P7sC{transform-origin:center;animation:spinner_svv2 .75s infinite linear}@keyframes spinner_svv2{100%{transform:rotate(360deg)}}</style><path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" class="spinner_P7sC"/></svg>',
+                setting:
+                    '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> </svg></div>',
+                airplay:
+                    '<div class="inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg></div>',
+                loading:
+                    '<svg width="36" height="36" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_P7sC{transform-origin:center;animation:spinner_svv2 .75s infinite linear}@keyframes spinner_svv2{100%{transform:rotate(360deg)}}</style><path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" class="spinner_P7sC"/></svg>',
             },
         })
         window.player.once('video:playing', () => {
