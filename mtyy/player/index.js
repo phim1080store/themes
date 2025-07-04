@@ -40,7 +40,8 @@ function getAudioUrl(type = 'single') {
 
         return { movie_id, activeDataIdText, selectorFromServer }
     }
-    let href = document.querySelector('li.on > a')?.getAttribute('href')
+    let activeLink = document.querySelector('li.on > a')
+    let href = activeLink?.getAttribute('href')
     let slug = href?.replace(/-\d+$/, '-')
     let movie_id = href?.split('/').filter(Boolean).pop().match(/\d+$/)?.[0]
 
@@ -50,23 +51,20 @@ function getAudioUrl(type = 'single') {
         return dataId?.startsWith(slug)
     })
 
-    let activeLink = document.querySelector('li.on > a')
-    let activeHref = activeLink?.href
-
     let activeEpisodeDiv = activeLink?.closest('div[id^="episode-"]')
     let activeEpisodeId = activeEpisodeDiv?.id.replace('episode-', '') || ''
-    let activeDataIdText = document.querySelector(`a[data-id="${activeEpisodeId}"]`)?.textContent.trim() || ''
+    let activeDataIdText = document.querySelector(`button[data-id="${activeEpisodeId}"]`)?.textContent.trim() || ''
 
     let selectorFromServer = filteredLinks.map((a, index) => {
         let episodeDiv = a.closest('div[id^="episode-"]')
         let episodeId = episodeDiv?.id.replace('episode-', '') || ''
-        let dataIdText = document.querySelector(`a[data-id="${episodeId}"]`)?.textContent.trim() || ''
+        let dataIdText = document.querySelector(`button[data-id="${episodeId}"]`)?.textContent.trim() || ''
 
         return {
             html: dataIdText == 'Vietsub' ? 'Tiếng gốc' : dataIdText,
             value: index,
             href: a.href,
-            default: a.href === activeHref,
+            default: a.href === href,
         }
     })
 
