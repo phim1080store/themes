@@ -421,7 +421,7 @@ function renderPlayer(type, link, id) {
             },
         })
         window.player.once('video:playing', () => {
-            axios.get('/phim/' + movie_slug + '/view')
+            fetch('/phim/' + movie_slug + '/view')
         })
         window.player.on('video:pause', function () {
             noSleep.disable()
@@ -472,30 +472,6 @@ function renderPlayer(type, link, id) {
 }
 document.addEventListener('DOMContentLoaded', function () {
     if (!isBot()) {
-        let tokens = ['5f7fbb2a8afb4b', '1b6a79055dd6a8']
-        let randomToken = tokens[Math.floor(Math.random() * tokens.length)]
-        fetch(`https://ipinfo.io/json?token=${randomToken}`)
-            .then((response) => response.json())
-            .then((data) => {
-                let countries = ['SG', 'HK', 'TW', 'CN', 'KR', 'TH', 'LA', 'KH', 'MM', 'MY', 'PH', 'JP']
-                let orgs = ['viettel', 'vnpt', 'vinaphone', 'fpt', 'cmc', 'mobifone', 'sctv', 'netnam', 'viet nam', 'cloudflare']
-                let country = data.country?.toUpperCase()
-                let org = data.org?.toLowerCase()
-                if (countries.includes(country) || (country === 'VN' && orgs.some((o) => org.includes(o)))) {
-                    renderPlayer(server.type, server.link, server.id)
-                }
-            })
-            .catch(() => {
-                axios
-                    .get('https://geolocation.onetrust.com/cookieconsentpub/v1/geo/location')
-                    .then((response) => {
-                        if (response.data.continent == 'AS') {
-                            renderPlayer(server.type, server.link, server.id)
-                        }
-                    })
-                    .catch(() => {
-                        renderPlayer(server.type, server.link, server.id)
-                    })
-            })
+        renderPlayer(server.type, server.link, server.id)
     }
 })
