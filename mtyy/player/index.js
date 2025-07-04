@@ -77,9 +77,9 @@ function playM3u8(video, url, art) {
     if (Hls.isSupported()) {
         if (art.hls) art.hls.destroy()
         art.hls = new Hls({
-            fragLoadingMaxRetry: 10,
-            fragLoadingRetryDelay: 1000,
-            fragLoadingMaxRetryTimeout: 30000,
+            fragLoadingMaxRetry: 30,
+            fragLoadingRetryDelay: 2000,
+            fragLoadingMaxRetryTimeout: 60000,
             maxBufferLength: 30,
             maxMaxBufferLength: 60,
             maxBufferSize: 150 * 1000 * 1000,
@@ -95,8 +95,10 @@ function playM3u8(video, url, art) {
                 switch (data.type) {
                     case Hls.ErrorTypes.NETWORK_ERROR:
                         art.notice.show = 'Error: Mất mạng, đang thử kết nối lại...'
-                        art.hls.startLoad()
-                        art.hls.recoverMediaError()
+                        setTimeout(() => {
+                            art.hls.startLoad()
+                            art.hls.recoverMediaError()
+                        }, 1000)
                         break
                     case Hls.ErrorTypes.MEDIA_ERROR:
                         art.notice.show = 'Error: Lỗi media, đang khôi phục...'
@@ -422,6 +424,7 @@ function renderPlayer(type, link, id) {
         })
         window.player.once('video:playing', () => {
             fetch('/phim/' + movie_slug + '/view')
+            document.querySelector('.mac-player').classList.remove('mac-player-start')
         })
         window.player.on('video:pause', function () {
             noSleep.disable()
