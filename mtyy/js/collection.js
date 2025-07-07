@@ -28,9 +28,9 @@ div.innerHTML=`
                     </a>
                 </div>
                 <div class="public-list-button" style="padding-top: 0;">
-                    <a href="${movie.href}">
+                    <a class="disable-hover" href="${movie.href}">
                         <h2 class="title hide ft4">${movie.name}</h2>
-                        <p class="hide ft1">${movie.origin_name}</p>
+                        <p class="sub-title hide ft1">${movie.origin_name}</p>
                     </a>
                 </div>
             </div>
