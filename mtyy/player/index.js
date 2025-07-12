@@ -75,9 +75,9 @@ function playM3u8(video, url, art) {
     if (Hls.isSupported()) {
         if (art.hls) art.hls.destroy()
         art.hls = new Hls({
-            fragLoadingMaxRetry: 30,
+            fragLoadingMaxRetry: 60,
             fragLoadingRetryDelay: 2000,
-            fragLoadingMaxRetryTimeout: 60000,
+            fragLoadingMaxRetryTimeout: 120000,
             maxBufferLength: 30,
             maxMaxBufferLength: 60,
             maxBufferSize: 150 * 1000 * 1000,
@@ -422,9 +422,25 @@ function renderPlayer(type, link, id) {
                     '<div class="art-inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg></div>',
                 loading:
                     '<svg width="36" height="36" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_P7sC{transform-origin:center;animation:spinner_svv2 .75s infinite linear}@keyframes spinner_svv2{100%{transform:rotate(360deg)}}</style><path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" class="spinner_P7sC"/></svg>',
-                state:
-                    '<div class="art-inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play-icon lucide-circle-play"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div>',
+                state: '<div class="art-inc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play-icon lucide-circle-play"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div>',
             },
+        })
+        let waitingTimer = null
+        window.player.on('video:waiting', function () {
+            if (waitingTimer) return
+            waitingTimer = setTimeout(function () {
+                if (window.hls) {
+                    window.hls.stopLoad()
+                    window.hls.startLoad(window.player.currentTime)
+                }
+                waitingTimer = null
+            }, 10000)
+        })
+        window.player.on('video:playing', function () {
+            if (waitingTimer) {
+                clearTimeout(waitingTimer)
+                waitingTimer = null
+            }
         })
         window.player.once('video:playing', () => {
             fetch('/phim/' + movie_slug + '/view')

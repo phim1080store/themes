@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded',function(){let d=document,s=d.createElement('script')
 s.src='https://https-phim1080-store.disqus.com/embed.js'
 s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s)
-requestAnimationFrame(()=>{new Swiper('.actor-roll',{slidesPerView:4,slidesPerGroup:4,grid:{rows:2,fill:'row',},spaceBetween:8,breakpoints:{1692:{slidesPerView:11,slidesPerGroup:11,spaceBetween:30},1330:{slidesPerView:9,slidesPerGroup:9,spaceBetween:30},993:{slidesPerView:7,slidesPerGroup:7,spaceBetween:30},560:{slidesPerView:6,slidesPerGroup:6,spaceBetween:15},},a11y:{enabled:!1},})})
+requestAnimationFrame(()=>{new Swiper('.actor-roll',{slidesPerView:4,slidesPerGroup:4,spaceBetween:4,grid:{rows:2,fill:'row',},breakpoints:{1692:{slidesPerView:9,slidesPerGroup:9,spaceBetween:15},1330:{slidesPerView:8,slidesPerGroup:8,spaceBetween:15},993:{slidesPerView:7,slidesPerGroup:7,spaceBetween:10},560:{slidesPerView:5,slidesPerGroup:5,spaceBetween:5},},a11y:{enabled:!1},})})
 document.querySelectorAll('.select-list').forEach((el)=>{el.addEventListener('click',function(e){e.preventDefault()
 const serverId=this.getAttribute('data-id')
 document.querySelectorAll('.list-content').forEach((c)=>c.classList.add('none'))
