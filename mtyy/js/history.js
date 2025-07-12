@@ -27,7 +27,7 @@ div.innerHTML=`
                         <img class="lazy lazy1 mask-0" referrerpolicy="no-referrer" alt="${movie.name}" src="${movie.thumb}">
                     </a>
                 </div>
-                <div class="public-list-button" style="padding-top: 0;">
+                <div class="public-list-button">
                     <a class="disable-hover" href="${movie.href}">
                         <h2 class="title hide ft4">${movie.name}</h2>
                         <p class="sub-title hide ft1">${movie.episode_name} ${formatSeconds(localStorage.getItem('phim1080-playerposition-' + movie.episode_id))}/${formatSeconds(movie.duration)}</p>
