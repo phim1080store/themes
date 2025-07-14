@@ -1,0 +1,1 @@
+.pin-wrapper{width:100%;position:relative;display:flex;flex-direction:column}.pin-remove{position:absolute;z-index:10000;top:.3rem;right:.3rem;cursor:pointer;background-color:#fff;color:#d32f2f;width:25px;height:25px;border-radius:.4rem;display:flex;align-items:center!important;justify-content:center!important}
