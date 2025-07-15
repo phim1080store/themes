@@ -71,13 +71,32 @@ function getAudioUrl(type = 'single') {
     return { movie_id, activeDataIdText, selectorFromServer }
 }
 
+let messageTimeoutId = null;
+
+function showMessage(message, duration = 5000) {
+    const el = document.querySelector('.art-layer-auto-notice');
+    if (!el) return;
+    if (messageTimeoutId) {
+        clearTimeout(messageTimeoutId);
+        messageTimeoutId = null;
+    }
+    el.classList.remove('v-hidden');
+    el.textContent = message;
+    if (duration > 0) {
+        messageTimeoutId = setTimeout(() => {
+            el.classList.add('v-hidden');
+            messageTimeoutId = null;
+        }, duration);
+    }
+}
+
 function playM3u8(video, url, art) {
     if (Hls.isSupported()) {
         if (art.hls) art.hls.destroy()
         art.hls = new Hls({
             fragLoadingMaxRetry: 60,
-            fragLoadingRetryDelay: 2000,
-            fragLoadingMaxRetryTimeout: 120000,
+            fragLoadingRetryDelay: 3000,
+            fragLoadingMaxRetryTimeout: 180000,
             maxBufferLength: 30,
             maxMaxBufferLength: 60,
             maxBufferSize: 150 * 1000 * 1000,
@@ -93,9 +112,9 @@ function playM3u8(video, url, art) {
                 switch (data.type) {
                     case Hls.ErrorTypes.NETWORK_ERROR:
                         if (data?.details === 'manifestLoadError') {
-                            art.notice.show = 'Error: Phim đang được upload, vui lòng quay lại sau'
+                            showMessage('Phim đang được upload, vui lòng quay lại sau')
                         } else {
-                            art.notice.show = 'Error: Mất mạng, đang thử kết nối lại...'
+                            showMessage('Mất mạng, đang thử kết nối lại...', 5000)
                             setTimeout(() => {
                                 art.hls.startLoad()
                                 art.hls.recoverMediaError()
@@ -103,40 +122,41 @@ function playM3u8(video, url, art) {
                         }
                         break
                     case Hls.ErrorTypes.MEDIA_ERROR:
-                        art.notice.show = 'Error: Lỗi media, đang khôi phục...'
+                        showMessage('Lỗi media, đang khôi phục...', 5000)
                         art.hls.recoverMediaError()
                         break
                     default:
-                        art.notice.show = 'Error: Lỗi nghiêm trọng, dừng phát...'
+                        showMessage('Lỗi nghiêm trọng, dừng phát...')
                         art.hls.destroy()
                         break
                 }
+            } else if (Hls.ErrorTypes.NETWORK_ERROR && data?.details === 'fragLoadError') {
+                showMessage('Mất mạng, đang thử kết nối lại...', 5000)
+                art.hls.startLoad()
             }
         })
         art.on('destroy', () => art.hls.destroy())
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = url
     } else {
-        art.notice.show = 'Error: unsupported playback format: m3u8'
+        showMessage('Trình duyệt không hỗ trợ phát video')
     }
 }
 
 function renderPlayer(type, link, id) {
-    if (type == 'embed') {
-        document.getElementById('player-wrapper').innerHTML = `<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no" allowfullscreen="" allow='autoplay'></iframe>`
-        fetch('/phim/' + movie_slug + '/view')
-        try {
-            let histories = JSON.parse(localStorage['phim1080-histories'] || '[]')
-            histories = histories.filter((item) => item.id !== data.id)
-            histories.unshift(data)
-            histories = histories.slice(0, 28)
-            localStorage['phim1080-histories'] = JSON.stringify(histories)
-        } catch (error) {
-            console.log(error)
-            localStorage.removeItem('phim1080-histories')
-        }
+    try {
+        let histories = JSON.parse(localStorage['phim1080-histories'] || '[]')
+        ;(data.duration = window.player.duration), (histories = histories.filter((item) => item.id !== data.id))
+        histories.unshift(data)
+        histories = histories.slice(0, 28)
+        localStorage['phim1080-histories'] = JSON.stringify(histories)
+    } catch (error) {
+        localStorage.removeItem('phim1080-histories')
     }
-
+    if (type == 'embed') {
+        fetch('/phim/' + movie_slug + '/view')
+        document.getElementById('player-wrapper').innerHTML = `<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no" allowfullscreen="" allow='autoplay'></iframe>`
+    }
     if (type == 'm3u8') {
         let timeoutId = null
         let resumeKey = 'phim1080-playerposition-' + id
@@ -365,6 +385,9 @@ function renderPlayer(type, link, id) {
                     window.player.seek = this.currentTime + 10
                 },
             },
+            {
+                html: `<div class="art-layer art-layer-auto-notice v-hidden" style="display: flex;"></div>`,
+            },
         ]
         window.player = new Artplayer({
             container: '#player-wrapper',
@@ -463,33 +486,6 @@ function renderPlayer(type, link, id) {
             var progress = parseFloat(localStorage.getItem(resumeKey))
             if (isNaN(progress)) progress = 0
             window.player.seek = progress
-            try {
-                let histories = JSON.parse(localStorage['phim1080-histories'] || '[]')
-                ;(data.duration = window.player.duration), (histories = histories.filter((item) => item.id !== data.id))
-                histories.unshift(data)
-                histories = histories.slice(0, 28)
-                localStorage['phim1080-histories'] = JSON.stringify(histories)
-            } catch (error) {
-                console.log(error)
-                localStorage.removeItem('phim1080-histories')
-            }
-        })
-        new MutationObserver((mutationsList) => {
-            let artNoticeInner = document.querySelector('.art-notice-inner')
-            mutationsList.forEach((mutation) => {
-                if (mutation.type === 'characterData' || mutation.type === 'childList') {
-                    let text = artNoticeInner.textContent.trim()
-                    if (text.includes('Error')) {
-                        artNoticeInner.classList.remove('v-hidden')
-                    } else {
-                        artNoticeInner.classList.add('v-hidden')
-                    }
-                }
-            })
-        }).observe(document.querySelector('.art-notice-inner'), {
-            childList: true,
-            subtree: true,
-            characterData: true,
         })
     }
 }
