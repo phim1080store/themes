@@ -73,7 +73,7 @@ function getAudioUrl(type = 'single') {
 
 let messageTimeoutId = null;
 
-function showMessage(message, duration = 5000) {
+function showMessage(message, duration = 0) {
     const el = document.querySelector('.art-layer-auto-notice');
     if (!el) return;
     if (messageTimeoutId) {
@@ -386,7 +386,7 @@ function renderPlayer(type, link, id) {
                 },
             },
             {
-                html: `<div class="art-layer art-layer-auto-notice v-hidden" style="display: flex;"></div>`,
+                html: `<div class="art-layer-auto-notice v-hidden" style="display: flex;"></div>`,
             },
         ]
         window.player = new Artplayer({
