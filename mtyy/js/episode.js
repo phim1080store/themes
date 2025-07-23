@@ -45,4 +45,12 @@ if(!message)return
 submitBtn.disabled=!0
 fetch('/phim/'+movie_slug+'/'+data.episode_id+'/report',{method:'POST',headers:{'Content-Type':'application/json',},body:JSON.stringify({message}),}).then(()=>{textarea.value=''}).finally(()=>{setTimeout(()=>{submitBtn.disabled=!1},3000)})
 MicroModal.close('modal-report')
-Toastify({text:'Gửi báo lỗi thành công',duration:3000,gravity:'bottom',position:'center',backgroundColor:'#0a0c0f',}).showToast()})})
+Toastify({text:'Gửi báo lỗi thành công',duration:3000,gravity:'bottom',position:'center',backgroundColor:'#0a0c0f',}).showToast()})
+const toggleBtn=document.querySelector('.toggle-wrapper')
+const tabListBox=document.querySelector('.player-list-box')
+toggleBtn.addEventListener('click',()=>{toggleBtn.classList.toggle('toggle-active')
+tabListBox.classList.toggle('collapsed')
+const lists=tabListBox.querySelectorAll('.anthology-list')
+lists.forEach((list)=>{if(list.classList.contains('select-a')){list.classList.remove('select-a')
+list.classList.add('select-b')}else if(list.classList.contains('select-b')){list.classList.remove('select-b')
+list.classList.add('select-a')}})})})
