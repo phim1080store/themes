@@ -71,22 +71,22 @@ function getAudioUrl(type = 'single') {
     return { movie_id, activeDataIdText, selectorFromServer }
 }
 
-let messageTimeoutId = null;
+let messageTimeoutId = null
 
 function showMessage(message, duration = 0) {
-    const el = document.querySelector('.art-layer-auto-notice');
-    if (!el) return;
+    const el = document.querySelector('.art-layer-auto-notice')
+    if (!el) return
     if (messageTimeoutId) {
-        clearTimeout(messageTimeoutId);
-        messageTimeoutId = null;
+        clearTimeout(messageTimeoutId)
+        messageTimeoutId = null
     }
-    el.classList.remove('v-hidden');
-    el.textContent = message;
+    el.classList.remove('v-hidden')
+    el.textContent = message
     if (duration > 0) {
         messageTimeoutId = setTimeout(() => {
-            el.classList.add('v-hidden');
-            messageTimeoutId = null;
-        }, duration);
+            el.classList.add('v-hidden')
+            messageTimeoutId = null
+        }, duration)
     }
 }
 
@@ -144,18 +144,19 @@ function playM3u8(video, url, art) {
 }
 
 function renderPlayer(type, link, id) {
-    try {
-        let histories = JSON.parse(localStorage['phim1080-histories'] || '[]')
-        ;(data.duration = window.player.duration), (histories = histories.filter((item) => item.id !== data.id))
-        histories.unshift(data)
-        histories = histories.slice(0, 28)
-        localStorage['phim1080-histories'] = JSON.stringify(histories)
-    } catch (error) {
-        localStorage.removeItem('phim1080-histories')
-    }
     if (type == 'embed') {
         fetch('/phim/' + movie_slug + '/view')
         document.getElementById('player-wrapper').innerHTML = `<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no" allowfullscreen="" allow='autoplay'></iframe>`
+        try {
+            let histories = JSON.parse(localStorage['phim1080-histories'] || '[]')
+            histories = histories.filter((item) => item.id !== data.id)
+            histories.unshift(data)
+            histories = histories.slice(0, 28)
+            localStorage['phim1080-histories'] = JSON.stringify(histories)
+        } catch (error) {
+            console.log(error)
+            localStorage.removeItem('phim1080-histories')
+        }
     }
     if (type == 'm3u8') {
         let timeoutId = null
@@ -486,6 +487,16 @@ function renderPlayer(type, link, id) {
             var progress = parseFloat(localStorage.getItem(resumeKey))
             if (isNaN(progress)) progress = 0
             window.player.seek = progress
+            try {
+                let histories = JSON.parse(localStorage['phim1080-histories'] || '[]')
+                ;(data.duration = window.player.duration), (histories = histories.filter((item) => item.id !== data.id))
+                histories.unshift(data)
+                histories = histories.slice(0, 28)
+                localStorage['phim1080-histories'] = JSON.stringify(histories)
+            } catch (error) {
+                console.log(error)
+                localStorage.removeItem('phim1080-histories')
+            }
         })
     }
 }

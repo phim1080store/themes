@@ -1,11 +1,12 @@
-function formatSeconds(seconds){if(isNaN(seconds)||seconds<0){seconds=0}
+function formatSeconds(seconds){seconds=parseInt(seconds)
+if(isNaN(seconds)||seconds<0)seconds=0
 const hours=Math.floor(seconds/3600)
 const minutes=Math.floor((seconds%3600)/60)
 return hours>0?`${hours}h${minutes}m`:`${minutes}m`}
 function renderHistories(){let histories=JSON.parse(localStorage.getItem('phim1080-histories')||'[]')
 let container=document.getElementById('histories-container')
 container.innerHTML=''
-if(histories.length===0){container.innerHTML=`
+if(!histories.length){container.innerHTML=`
             <div class="content">
                 <div class="bOxtzb">
                     <img src="https://cdn.jsdelivr.net/gh/phim1080store/themes/mtyy/img/box.webp" alt="">
@@ -13,7 +14,11 @@ if(histories.length===0){container.innerHTML=`
                 </div>
             </div>`
 return}
-histories.forEach((movie)=>{let div=document.createElement('div')
+histories.forEach((movie)=>{const current=parseInt(localStorage.getItem('phim1080-playerposition-'+movie.episode_id))||0
+const duration=parseInt(movie.duration)
+const validDuration=!isNaN(duration)&&duration>0
+const percent=validDuration?Math.min((current/duration)*100,100).toFixed(0):0
+let div=document.createElement('div')
 div.className='public-list-box public-pic-b'
 div.innerHTML=`
             <div class="pin-wrapper">
@@ -22,9 +27,14 @@ div.innerHTML=`
                         <path d="M6 6L18 18M6 18L18 6" stroke="currentColor" stroke-width="2" />
                     </svg>
                 </div>
-                <div class="public-list-div">
+                <div class="public-list-div" style="position: relative;">
                     <a class="public-list-exp" href="${movie.href}">
                         <img class="lazy lazy1 mask-0" referrerpolicy="no-referrer" alt="${movie.name}" src="${movie.thumb}">
+                        ${
+                            validDuration
+                                ? `<div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(255, 179, 167, 0.6);"><div style="width: ${percent}%; height: 100%; background: #d32f2f;"></div></div>`
+                                : ''
+                        }
                     </a>
                 </div>
                 <div class="public-list-button">
