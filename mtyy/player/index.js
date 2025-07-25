@@ -40,12 +40,12 @@ function getAudioUrl(type = 'single') {
 
         return { movie_id, activeDataIdText, selectorFromServer }
     }
-    let activeLink = document.querySelector('li.on  a')
+    let activeLink = document.querySelector('li.on > .info > a')
     let href = activeLink?.getAttribute('href')
     let slug = href?.replace(/-\d+$/, '-')
     let movie_id = href?.split('/').filter(Boolean).pop().match(/\d+$/)?.[0]
 
-    let allLinks = Array.from(document.querySelectorAll('[id^="episode-"] a'))
+    let allLinks = Array.from(document.querySelectorAll('[id^="episode-"] .info > a'))
     let filteredLinks = allLinks.filter((a) => {
         let dataId = a.getAttribute('href')
         return dataId?.startsWith(slug)
