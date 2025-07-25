@@ -40,7 +40,7 @@ function getAudioUrl(type = 'single') {
 
         return { movie_id, activeDataIdText, selectorFromServer }
     }
-    let activeLink = document.querySelector('li.on > a')
+    let activeLink = document.querySelector('li.on  a')
     let href = activeLink?.getAttribute('href')
     let slug = href?.replace(/-\d+$/, '-')
     let movie_id = href?.split('/').filter(Boolean).pop().match(/\d+$/)?.[0]
