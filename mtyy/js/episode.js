@@ -36,20 +36,21 @@ collections=collections.slice(0,28)
 localStorage['phim1080-collections']=JSON.stringify(collections)
 Toastify({text:'Đã thêm vào bộ sưu tập',duration:3000,gravity:'bottom',position:'center',backgroundColor:'#0a0c0f',}).showToast()})
 document.querySelector('#change-server-btn')?.addEventListener('click',function(e){e.preventDefault()
-Promise.all([fetch('https://ophim1.com/v1/api/tim-kiem?keyword='+data.origin_name).then((res)=>res.json()).catch(()=>null),fetch('https://phim.nguonc.com/api/films/search?keyword='+data.origin_name).then((res)=>res.json()).catch(()=>null),]).then(async([ophimData,nguoncData])=>{let rendered=!1
+const iconContainer=document.getElementById('change-server-btn');iconContainer.querySelector('svg').outerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 50 50" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"> <circle cx="25" cy="25" r="20" stroke-opacity="0.25" /> <path d="M45 25a20 20 0 0 1-20 20" stroke-opacity="0.75"> <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/> </path> </svg>`;Promise.all([fetch('https://ophim1.com/v1/api/tim-kiem?keyword='+data.origin_name).then((res)=>res.json()).catch(()=>null),fetch('https://phim.nguonc.com/api/films/search?keyword='+data.origin_name).then((res)=>res.json()).catch(()=>null),]).then(async([ophimData,nguoncData])=>{let rendered=!1
 if(ophimData?.data?.items){const found=ophimData.data.items.find((item)=>item.year==data.year&&(item.slug==data.slug||item.origin_name==data.origin_name))
 if(found){try{const detailRes=await fetch('https://ophim1.com/v1/api/phim/'+found.slug)
 const detailData=await detailRes.json()
 const foundEp=detailData.data.item.episodes.find((ep)=>ep.server_name.split(' #')[0]===data.server_name)?.server_data.find((ep)=>ep.name==data.episode_name.replace('Tập ',''))
-if(foundEp){renderPlayer('m3u8',foundEp.link_m3u8,data.id)
+if(foundEp){renderPlayer('m3u8',foundEp.link_m3u8,server.id)
 rendered=!0}}catch{}}}
 if(!rendered&&nguoncData?.items){const found=nguoncData.items.find((item)=>(item.total_episodes>1?'series':'single')==data.type&&(item.slug==data.slug||item.original_name==data.origin_name))
 if(found){try{const detailRes=await fetch('https://phim.nguonc.com/api/film/'+found.slug)
 const detailData=await detailRes.json()
 const foundEp=detailData.movie.episodes.find((ep)=>ep.server_name.split(' #')[0]===data.server_name)?.items.find((ep)=>ep.name==data.episode_name.replace('Tập ',''))
-if(foundEp){renderPlayer('embed',foundEp.embed,data.id)
+if(foundEp){renderPlayer('embed',foundEp.embed,server.id)
 rendered=!0}}catch{}}}
-if(!rendered){Toastify({text:'Không tìm thấy server backup',duration:3000,gravity:'bottom',position:'center',backgroundColor:'#0a0c0f',}).showToast()}})})
+if(!rendered){Toastify({text:'Không tìm thấy server backup',duration:3000,gravity:'bottom',position:'center',backgroundColor:'#0a0c0f',}).showToast()}
+iconContainer.querySelector('svg').outerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`})})
 MicroModal.init()
 let form=document.getElementById('report-form')
 let textarea=document.getElementById('report-message')
