@@ -113,6 +113,8 @@ function playM3u8(video, url, art) {
                     case Hls.ErrorTypes.NETWORK_ERROR:
                         if (data?.details === 'manifestLoadError') {
                             showMessage('Phim đang được upload, vui lòng quay lại sau')
+                        } else if (data?.details === 'manifestParsingError') {
+                            document.querySelector('#change-server-btn').click();
                         } else {
                             showMessage('Mất mạng, đang thử kết nối lại...', 5000)
                             setTimeout(() => {
