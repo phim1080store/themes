@@ -143,6 +143,8 @@ function playM3u8(video, url, art) {
     }
 }
 
+let noSleep = new NoSleep()
+
 function renderPlayer(type, link, id) {
     if (type == 'embed') {
         fetch('/phim/' + movie_slug + '/view')
@@ -163,7 +165,6 @@ function renderPlayer(type, link, id) {
         let resumeKey = 'phim1080-playerposition-' + id
         let nextSlug = getNextPrevEpisode(true)
         let autoData = getAudioUrl(data.type)
-        let noSleep = new NoSleep()
         let language = {
             vi: {
                 'Video Info': 'Thông tin video',
@@ -390,6 +391,10 @@ function renderPlayer(type, link, id) {
                 html: `<div class="art-layer-auto-notice v-hidden" style="display: flex;"></div>`,
             },
         ]
+        if (window.player) {
+            window.player.destroy();
+            window.player = null;
+        }
         window.player = new Artplayer({
             container: '#player-wrapper',
             url: link,
