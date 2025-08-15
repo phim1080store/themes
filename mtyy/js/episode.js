@@ -40,13 +40,13 @@ const iconContainer=document.getElementById('change-server-btn');iconContainer.q
 if(ophimData?.data?.items){const found=ophimData.data.items.find((item)=>item.year==data.year&&(item.slug==movie_slug||item.origin_name?.toLowerCase()==data.origin_name?.toLowerCase()))
 if(found){try{const detailRes=await fetch('https://ophim1.com/v1/api/phim/'+found.slug)
 const detailData=await detailRes.json()
-const foundEp=detailData.data.item.episodes.find((ep)=>ep.server_name.split(' #')[0].toLowerCase()===data.server_name.toLowerCase())?.server_data.find((ep)=>ep.name==data.episode_name.replace('Tập ',''))
+const foundEp=detailData.data.item.episodes.find((ep)=>ep.server_name.split(' #')[0].toLowerCase()===data.server_name.toLowerCase())?.server_data.find((ep)=>ep.name.toLowerCase().replace('tập ','')==data.episode_name.toLowerCase().replace('tập ',''))
 if(foundEp){renderPlayer('m3u8',foundEp.link_m3u8,server.id)
 rendered=!0}}catch{}}}
 if(!rendered&&nguoncData?.items){const found=nguoncData.items.find((item)=>(item.total_episodes>1?'series':'single')==data.type&&(item.slug==movie_slug||item.original_name?.toLowerCase()==data.origin_name?.toLowerCase()))
 if(found){try{const detailRes=await fetch('https://phim.nguonc.com/api/film/'+found.slug)
 const detailData=await detailRes.json()
-const foundEp=detailData.movie.episodes.find((ep)=>ep.server_name.split(' #')[0].toLowerCase()===data.server_name.toLowerCase())?.items.find((ep)=>ep.name==data.episode_name.replace('Tập ',''))
+const foundEp=detailData.movie.episodes.find((ep)=>ep.server_name.split(' #')[0].toLowerCase()===data.server_name.toLowerCase())?.items.find((ep)=>ep.name.toLowerCase().replace('tập ','')==data.episode_name.toLowerCase().replace('tập ',''))
 if(foundEp){renderPlayer('embed',foundEp.embed,server.id)
 rendered=!0}}catch{}}}
 if(!rendered){Toastify({text:'Không tìm thấy server backup',duration:3000,gravity:'bottom',position:'center',backgroundColor:'#0a0c0f',}).showToast()}
