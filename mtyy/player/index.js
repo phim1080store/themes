@@ -150,7 +150,7 @@ let noSleep = new NoSleep()
 function renderPlayer(type, link, id) {
     if (type == 'embed') {
         fetch('/phim/' + movie_slug + '/view')
-        document.getElementById('player-wrapper').innerHTML = `<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no" allowfullscreen="" allow='autoplay'></iframe>`
+        document.getElementById('player-wrapper').innerHTML = `<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no" allowfullscreen="" allow='autoplay' referrerpolicy="no-referrer"></iframe>`
         try {
             let histories = JSON.parse(localStorage['phim1080-histories'] || '[]')
             histories = histories.filter((item) => item.id !== data.id)
